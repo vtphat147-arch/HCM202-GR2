@@ -17,8 +17,15 @@ const sanitizeJsonContent = (content: string): string => {
   let text = content.trim();
   // Strip Markdown fences ```json ... ```
   if (text.startsWith("```")) {
-    text = text.replace(/^```[a-zA-Z]*\s*/, "").replace(/```$/, "").trim();
+    text = text.replace(/^```[a-zA-Z]*\s*/, "").replace(/```$/gm, "").trim();
   }
+  
+  // Try to extract JSON array/object if wrapped in text
+  const jsonMatch = text.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
+  if (jsonMatch) {
+    text = jsonMatch[1];
+  }
+  
   return text;
 };
 
@@ -231,59 +238,170 @@ export const fetchRegionQuiz = async (
 
   try {
     const langInstruction = language === 'vi' 
-      ? "Ngôn ngữ: Tiếng Việt." 
-      : "Language: English.";
+      ? "Ngôn ngữ: Tiếng Việt. Tất cả câu hỏi, đáp án và giải thích phải bằng tiếng Việt." 
+      : "Language: English. All questions, options, and explanations must be in English.";
+
+    // Map region names to full context for better AI understanding
+    const regionContextMap: Record<string, { vi: string; en: string }> = {
+      'Châu Phi': {
+        vi: 'Châu Phi (54 quốc gia châu Phi). Tập trung vào: hợp tác Nam-Nam, gìn giữ hòa bình LHQ, đầu tư Viettel, xuất khẩu gạo, quan hệ truyền thống từ phong trào giải phóng dân tộc.',
+        en: 'Africa (54 African countries). Focus on: South-South cooperation, UN peacekeeping, Viettel investments, rice exports, traditional relations from national liberation movements.'
+      },
+      'ASEAN': {
+        vi: 'ASEAN (Hiệp hội các quốc gia Đông Nam Á). Tập trung vào: Việt Nam gia nhập 1995, Cộng đồng ASEAN 2015, AEC, vai trò Chủ tịch ASEAN, giải quyết tranh chấp Biển Đông, quan hệ với các thành viên.',
+        en: 'ASEAN (Association of Southeast Asian Nations). Focus on: Vietnam joining 1995, ASEAN Community 2015, AEC, ASEAN Chairmanship role, South China Sea dispute resolution, relations with member states.'
+      },
+      'APEC': {
+        vi: 'APEC (Diễn đàn Hợp tác Kinh tế Châu Á - Thái Bình Dương). Tập trung vào: Việt Nam gia nhập 1998, đăng cai APEC 2006 và 2017, quan hệ với Mỹ, Trung Quốc, Nhật Bản, Hàn Quốc, thương mại và FDI.',
+        en: 'APEC (Asia-Pacific Economic Cooperation). Focus on: Vietnam joining 1998, hosting APEC 2006 and 2017, relations with USA, China, Japan, South Korea, trade and FDI.'
+      },
+      'Liên Hợp Quốc (UN)': {
+        vi: 'Liên Hợp Quốc (UN). Tập trung vào: Việt Nam gia nhập 1977, Ủy viên HĐBA 2008-2009 và 2020-2021, gìn giữ hòa bình, SDGs, quan hệ đa phương.',
+        en: 'United Nations (UN). Focus on: Vietnam joining 1977, UNSC membership 2008-2009 and 2020-2021, peacekeeping, SDGs, multilateral relations.'
+      },
+      'Liên Minh Châu Âu (EU)': {
+        vi: 'Liên Minh Châu Âu (EU). Tập trung vào: Hiệp định EVFTA 2020, EVIPA, quan hệ từ 1990, thương mại và đầu tư, vai trò cầu nối ASEAN-EU.',
+        en: 'European Union (EU). Focus on: EVFTA agreement 2020, EVIPA, relations since 1990, trade and investment, bridging ASEAN-EU relations.'
+      }
+    };
+
+    // Get enhanced context or use default
+    const enhancedContext = regionContextMap[regionName] || {
+      vi: `Quan hệ giữa Việt Nam và ${regionName}. Tập trung vào: lịch sử hợp tác, các hiệp định đã ký kết, con số thương mại và đầu tư cụ thể, vai trò của Việt Nam, các sự kiện ngoại giao quan trọng gần đây, và ý nghĩa chiến lược.`,
+      en: `Relations between Vietnam and ${regionName}. Focus on: cooperation history, signed agreements, specific trade and investment figures, Vietnam's role, important recent diplomatic events, and strategic significance.`
+    };
+
+    const regionContext = language === 'vi' ? enhancedContext.vi : enhancedContext.en;
 
     const prompt = `
-      Tạo 10 câu hỏi trắc nghiệm (Multiple Choice) chất lượng cao để kiểm tra kiến thức về chủ đề: "${regionName}" (trong bối cảnh quan hệ quốc tế, ngoại giao, kinh tế của Việt Nam).
+      ${regionContext}
+      
       ${langInstruction}
       
-      Yêu cầu quan trọng:
-      - Đảm bảo 10 câu hỏi KHÔNG bị trùng lặp về nội dung. Mỗi câu hỏi phải khai thác một khía cạnh riêng biệt.
-      - Nội dung phong phú: Lịch sử, các hiệp định (FTA), con số thương mại, sự kiện ngoại giao gần đây, và ý nghĩa chiến lược.
-      - Độ khó: Trung bình - Khó (Dành cho sinh viên/người nghiên cứu).
-      - Câu hỏi phải thú vị, kích thích tư duy, tránh các câu hỏi quá đơn giản hoặc hiển nhiên.
-      - Trả về JSON object: {"questions":[{question, options (4), correctAnswerIndex, explanation}]}.
+      NHIỆM VỤ: Tạo chính xác 10 câu hỏi trắc nghiệm về chủ đề trên. Mỗi câu hỏi phải có đúng 4 đáp án (A, B, C, D), chỉ có 1 đáp án đúng.
+      
+      YÊU CẦU NGHIÊM NGẶT:
+      1. Tạo đúng 10 câu hỏi, không thiếu không thừa.
+      2. Mỗi câu hỏi khai thác một khía cạnh riêng biệt: lịch sử hợp tác, hiệp định cụ thể (tên, năm), số liệu thương mại/đầu tư, sự kiện ngoại giao quan trọng, vai trò của Việt Nam, ý nghĩa chiến lược.
+      3. Độ khó: Trung bình - Khó (dành cho sinh viên đại học/người nghiên cứu).
+      4. Mỗi câu hỏi có đúng 4 đáp án (options), mỗi đáp án là một câu trả lời hoàn chỉnh.
+      5. correctAnswerIndex phải là số nguyên từ 0 đến 3: 0 = đáp án đầu tiên, 1 = đáp án thứ hai, 2 = đáp án thứ ba, 3 = đáp án thứ tư.
+      6. explanation phải giải thích rõ ràng tại sao đáp án đó đúng, có thể kèm số liệu hoặc sự kiện cụ thể.
+      7. FORMAT JSON: Trả về mảng JSON hợp lệ. Ví dụ: [{"question":"Việt Nam gia nhập ASEAN vào năm nào?","options":["1993","1995","1997","1999"],"correctAnswerIndex":1,"explanation":"Việt Nam chính thức gia nhập ASEAN ngày 28/7/1995 tại Brunei."}]
+      8. QUAN TRỌNG: Tất cả dấu ngoặc kép bên trong string phải escape bằng \\". Không được có ký tự xuống dòng (\\n) trong string. JSON phải hợp lệ 100%.
     `;
 
     let questions: QuizQuestion[] = [];
 
-    if (useGroq) {
-      const content = await callGroq(prompt);
-      const parsed = JSON.parse(sanitizeJsonContent(content));
-      const list = Array.isArray(parsed) ? parsed : parsed?.questions;
-      questions = (list || []).map((q: QuizQuestion, idx: number) => ({ ...q, id: idx }));
-    } else {
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                id: { type: Type.INTEGER },
-                question: { type: Type.STRING },
-                options: { type: Type.ARRAY, items: { type: Type.STRING } },
-                correctAnswerIndex: { type: Type.INTEGER, description: "Index of the correct answer (0-3)" },
-                explanation: { type: Type.STRING, description: "Explanation of why the answer is correct" }
-              },
-              required: ["question", "options", "correctAnswerIndex", "explanation"]
+    const parseQuizResponse = (content: string): QuizQuestion[] => {
+      const sanitized = sanitizeJsonContent(content);
+      let parsed: any;
+      
+      try {
+        parsed = JSON.parse(sanitized);
+      } catch (e) {
+        // Try to fix common JSON issues
+        try {
+          // Remove trailing commas
+          let fixed = sanitized.replace(/,(\s*[}\]])/g, '$1');
+          // Try to fix unescaped quotes in strings (heuristic)
+          fixed = fixed.replace(/(?<!\\)"(?![,}\]\s])/g, '\\"');
+          parsed = JSON.parse(fixed);
+        } catch (e2) {
+          console.warn(`[Quiz Parse Error for ${regionName}]`, e2, "Raw content:", sanitized.substring(0, 200));
+          return [];
+        }
+      }
+      
+      const list = Array.isArray(parsed) ? parsed : parsed?.questions || parsed?.data || [];
+      if (!Array.isArray(list) || list.length === 0) {
+        console.warn(`[Quiz Empty] No questions found for ${regionName}`);
+        return [];
+      }
+      
+      // Validate and clean questions
+      const cleaned = list
+        .filter((q: any) => q && q.question && Array.isArray(q.options) && q.options.length >= 2 && typeof q.correctAnswerIndex === 'number')
+        .map((q: any, idx: number) => ({
+          id: idx,
+          question: String(q.question || '').trim(),
+          options: (q.options || []).map((opt: any) => String(opt || '').trim()).filter(Boolean),
+          correctAnswerIndex: Math.max(0, Math.min(q.correctAnswerIndex || 0, 3)),
+          explanation: String(q.explanation || '').trim()
+        }))
+        .filter((q: QuizQuestion) => q.question && q.options.length >= 2);
+      
+      if (cleaned.length === 0) {
+        console.warn(`[Quiz Validation Failed] No valid questions after cleaning for ${regionName}`);
+      }
+      
+      return cleaned;
+    };
+
+    // Retry logic: try up to 2 times
+    let lastError: any = null;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        if (useGroq) {
+          console.log(`[Quiz] Fetching for ${regionName} (attempt ${attempt + 1})...`);
+          const content = await callGroq(prompt);
+          console.log(`[Quiz] Raw response length: ${content.length} chars`);
+          questions = parseQuizResponse(content);
+          console.log(`[Quiz] Parsed ${questions.length} questions for ${regionName}`);
+          if (questions.length >= 5) break; // Success if we got at least 5 questions
+        } else {
+          console.log(`[Quiz] Fetching for ${regionName} via Gemini (attempt ${attempt + 1})...`);
+          const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+            config: {
+              responseMimeType: "application/json",
+              responseSchema: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    id: { type: Type.INTEGER },
+                    question: { type: Type.STRING },
+                    options: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    correctAnswerIndex: { type: Type.INTEGER, description: "Index of the correct answer (0-3)" },
+                    explanation: { type: Type.STRING, description: "Explanation of why the answer is correct" }
+                  },
+                  required: ["question", "options", "correctAnswerIndex", "explanation"]
+                }
+              }
             }
+          });
+
+          const text = response.text;
+          if (text) {
+            console.log(`[Quiz] Gemini response length: ${text.length} chars`);
+            questions = parseQuizResponse(text);
+            console.log(`[Quiz] Parsed ${questions.length} questions for ${regionName}`);
+            if (questions.length >= 5) break; // Success
+          } else {
+            console.warn(`[Quiz] Gemini returned empty text for ${regionName}`);
           }
         }
-      });
-
-      const text = response.text;
-      if (text) {
-        const parsed = JSON.parse(sanitizeJsonContent(text)) as QuizQuestion[];
-        questions = parsed.map((q, idx) => ({ ...q, id: idx }));
+      } catch (err) {
+        lastError = err;
+        console.warn(`[Quiz Attempt ${attempt + 1} Failed for ${regionName}]`, err);
+        if (attempt === 0) {
+          // Wait a bit before retry
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
       }
     }
 
-    quizCache[cacheKey] = questions;
+    // Only cache if we got valid questions
+    if (questions.length >= 5) {
+      quizCache[cacheKey] = questions;
+    } else if (questions.length > 0) {
+      // Cache partial results but log warning
+      console.warn(`[Quiz Partial] Only got ${questions.length} questions for ${regionName}, expected 10`);
+      quizCache[cacheKey] = questions;
+    }
+    
     return questions;
 
   } catch (error) {
