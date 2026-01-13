@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kết Nối Quốc Tế Của Việt Nam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              diplomatic: {
+                900: '#1a237e', // Deep Blue
+                800: '#283593',
+                100: '#e8eaf6',
+              },
+              gold: {
+                400: '#ffca28',
+                500: '#ffc107',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Merriweather', 'serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #f8fafc;
+      }
+      .map-container {
+        background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg'); 
+        /* Using a clean SVG world map as background pattern or base */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      /* Custom pulse animation for pins */
+      @keyframes pulse-ring {
+        0% { transform: scale(0.8); opacity: 0.5; }
+        100% { transform: scale(2.4); opacity: 0; }
+      }
+      .ring-pulse {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        background-color: rgba(255, 193, 7, 0.6);
+      }
+      
+      /* Line drawing animation */
+      .path-draw {
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+        animation: draw-line 2.5s ease-out forwards;
+      }
+      
+      @keyframes draw-line {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+    </style>
+  <script type="module" crossorigin src="/assets/index-CeETfnj8.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-Coc8YaK4.js">
+  <link rel="modulepreload" crossorigin href="/assets/gemini-nZvJrMcm.js">
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
