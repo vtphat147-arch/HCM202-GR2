@@ -3,7 +3,7 @@ import React, { useState, Suspense } from 'react';
 import { RegionData, RegionID, Language } from './types';
 import InfoModal from './components/InfoModal';
 import InteractiveMap from './components/InteractiveMap';
-import { BookOpen, Map as MapIcon, Languages, ChevronRight, GraduationCap, BarChart3, Briefcase, History, Newspaper, Users, Bot, Loader2 } from 'lucide-react';
+import { BookOpen, Map as MapIcon, Languages, ChevronRight, ChevronDown, GraduationCap, BarChart3, Briefcase, History, Newspaper, Users, Bot, Loader2 } from 'lucide-react';
 
 // Lazy load heavy components
 const KnowledgePage = React.lazy(() => import('./components/KnowledgePage'));
@@ -80,6 +80,7 @@ const App: React.FC = () => {
   const [language, setLanguage] = useState<Language>('vi');
   const [currentView, setCurrentView] = useState<ViewState>('map');
   const [quizRegionId, setQuizRegionId] = useState<string | null>(null); // Track which region is being quizzed
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
 
   // Derived regions data based on language
   const regions: RegionData[] = RAW_REGIONS.map(r => ({
@@ -122,8 +123,8 @@ const App: React.FC = () => {
   const texts = {
     title: language === 'vi' ? 'Kết Nối Quốc Tế Của Việt Nam' : 'Vietnam International Connections',
     subtitle: language === 'vi' 
-      ? 'Khám phá hành trình hội nhập và các mối quan hệ ngoại giao chiến lược.'
-      : 'Discover the integration journey and strategic diplomatic relationships.',
+      ? 'Khám phá hành trình hội nhập và các mối quan hệ ngoại giao chiến lược của Việt Nam trong kỷ nguyên mới.'
+      : 'Discover Vietnam\'s integration journey and strategic diplomatic partnerships in the new era.',
     mapLegendTitle: language === 'vi' ? 'Bản đồ Tương tác' : 'Interactive Map',
     mapLegendDesc: language === 'vi' 
       ? 'Nhấp vào các điểm đánh dấu trên bản đồ.' 
@@ -139,31 +140,47 @@ const App: React.FC = () => {
     youthBtn: language === 'vi' ? 'Thanh Niên' : 'Youth',
   };
 
+  const isActiveView = (view: ViewState) => currentView === view;
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-gray-800 flex flex-col">
       
       {/* Header Section */}
-      <header className="bg-white shadow-sm z-20 sticky top-0">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setCurrentView('map')}>
-            <BookOpen className="text-diplomatic-900 w-6 h-6 md:w-8 md:h-8" />
-            <h1 className="text-lg md:text-2xl font-serif font-bold text-diplomatic-900 uppercase tracking-wide hidden sm:block">
-              {texts.title}
-            </h1>
-             <h1 className="text-lg font-serif font-bold text-diplomatic-900 uppercase tracking-wide sm:hidden">
-              VN Connections
-            </h1>
+      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-white/60 shadow-[0_4px_20px_rgba(15,23,42,0.06)]">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center gap-3">
+          <div
+            className="flex items-center gap-3 cursor-pointer group"
+            onClick={() => setCurrentView('map')}
+          >
+            <div className="relative">
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gold-400/50 to-diplomatic-900/40 blur-sm opacity-60 group-hover:opacity-90 transition-opacity" />
+              <div className="relative flex items-center justify-center w-9 h-9 md:w-11 md:h-11 rounded-xl bg-white shadow-sm border border-diplomatic-100">
+                <BookOpen className="text-diplomatic-900 w-5 h-5 md:w-6 md:h-6" />
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <h1 className="text-base md:text-xl font-serif font-bold text-diplomatic-900 uppercase tracking-wide leading-tight hidden sm:block">
+                {texts.title}
+              </h1>
+              <h1 className="text-base font-serif font-bold text-diplomatic-900 uppercase tracking-wide sm:hidden">
+                VN Connections
+              </h1>
+              <p className="hidden md:block text-[11px] font-medium text-slate-500">
+                {language === 'vi' ? 'Ngoại giao · Kinh tế · Thanh niên' : 'Diplomacy · Economy · Youth'}
+              </p>
+            </div>
           </div>
           
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar max-w-[60vw] md:max-w-none">
+          <div className="flex items-center gap-2 overflow-x-auto md:overflow-visible no-scrollbar max-w-[60vw] md:max-w-none">
             {/* View Switcher Buttons (Only show if not in Quiz mode) */}
             {currentView !== 'quiz' && (
               <>
+                {/* Primary views */}
                 <button
-                  onClick={() => setCurrentView('timeline')}
+                  onClick={() => { setCurrentView('timeline'); setIsMoreOpen(false); }}
                   className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm whitespace-nowrap ${
-                    currentView === 'timeline'
-                      ? 'bg-gold-500 text-diplomatic-900' 
+                    isActiveView('timeline')
+                      ? 'bg-gradient-to-r from-gold-500 to-amber-400 text-diplomatic-900 shadow-md'
                       : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                   }`}
                   title={texts.timelineBtn}
@@ -173,23 +190,10 @@ const App: React.FC = () => {
                 </button>
 
                 <button
-                  onClick={() => setCurrentView('cooperation')}
+                  onClick={() => { setCurrentView('dashboard'); setIsMoreOpen(false); }}
                   className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm whitespace-nowrap ${
-                    currentView === 'cooperation'
-                      ? 'bg-gold-500 text-diplomatic-900' 
-                      : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-                  }`}
-                  title={texts.fieldsBtn}
-                >
-                  <Briefcase className="w-4 h-4" />
-                  <span className="hidden lg:inline">{texts.fieldsBtn}</span>
-                </button>
-
-                 <button
-                  onClick={() => setCurrentView('dashboard')}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm whitespace-nowrap ${
-                    currentView === 'dashboard'
-                      ? 'bg-gold-500 text-diplomatic-900' 
+                    isActiveView('dashboard')
+                      ? 'bg-gradient-to-r from-gold-500 to-amber-400 text-diplomatic-900 shadow-md' 
                       : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                   }`}
                   title={texts.dashboardBtn}
@@ -198,11 +202,11 @@ const App: React.FC = () => {
                   <span className="hidden lg:inline">{texts.dashboardBtn}</span>
                 </button>
 
-                 <button
-                  onClick={() => setCurrentView('news')}
+                <button
+                  onClick={() => { setCurrentView('news'); setIsMoreOpen(false); }}
                   className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm whitespace-nowrap ${
-                    currentView === 'news'
-                      ? 'bg-gold-500 text-diplomatic-900' 
+                    isActiveView('news')
+                      ? 'bg-gradient-to-r from-gold-500 to-amber-400 text-diplomatic-900 shadow-md' 
                       : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                   }`}
                   title={texts.newsBtn}
@@ -211,48 +215,70 @@ const App: React.FC = () => {
                   <span className="hidden lg:inline">{texts.newsBtn}</span>
                 </button>
 
-                <button
-                  onClick={() => setCurrentView('youth')}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm whitespace-nowrap ${
-                    currentView === 'youth'
-                      ? 'bg-gold-500 text-diplomatic-900' 
-                      : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-                  }`}
-                  title={texts.youthBtn}
-                >
-                  <Users className="w-4 h-4" />
-                  <span className="hidden lg:inline">{texts.youthBtn}</span>
-                </button>
+                {/* More menu for secondary views */}
+                <div className="relative">
+                  <button
+                    onClick={() => setIsMoreOpen(prev => !prev)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm whitespace-nowrap border ${
+                      isActiveView('cooperation') || isActiveView('youth') || isActiveView('chatbot') || isActiveView('knowledge')
+                        ? 'bg-slate-900 text-white border-slate-900'
+                        : 'bg-white text-gray-700 hover:bg-gray-100 border-gray-200'
+                    }`}
+                    title={language === 'vi' ? 'Khám phá thêm' : 'More sections'}
+                  >
+                    <span className="hidden lg:inline">{language === 'vi' ? 'Khám phá thêm' : 'More'}</span>
+                    <span className="lg:hidden">{language === 'vi' ? 'Thêm' : 'More'}</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform ${isMoreOpen ? 'rotate-180' : ''}`} />
+                  </button>
 
-                <button
-                  onClick={() => setCurrentView('chatbot')}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm whitespace-nowrap ${
-                    currentView === 'chatbot'
-                      ? 'bg-gold-500 text-diplomatic-900' 
-                      : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-                  }`}
-                  title={language === 'vi' ? 'Trợ Lý AI' : 'AI Assistant'}
-                >
-                  <Bot className="w-4 h-4" />
-                  <span className="hidden lg:inline">{language === 'vi' ? 'Trợ Lý AI' : 'AI Assistant'}</span>
-                </button>
+                  {isMoreOpen && (
+                    <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-2xl shadow-xl py-2 z-30">
+                      <button
+                        onClick={() => { setCurrentView('cooperation'); setIsMoreOpen(false); }}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors ${
+                          isActiveView('cooperation') ? 'bg-gold-50 text-diplomatic-900 font-semibold' : 'text-gray-700'
+                        }`}
+                      >
+                        <Briefcase className="w-4 h-4" />
+                        <span>{texts.fieldsBtn}</span>
+                      </button>
 
-                <button
-                  onClick={() => setCurrentView('knowledge')}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm whitespace-nowrap ${
-                    currentView === 'knowledge' 
-                      ? 'bg-gold-500 text-diplomatic-900' 
-                      : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-                  }`}
-                  title={texts.knowledgeBtn}
-                >
-                  <GraduationCap className="w-4 h-4" />
-                  <span className="hidden lg:inline">{texts.knowledgeBtn}</span>
-                </button>
+                      <button
+                        onClick={() => { setCurrentView('youth'); setIsMoreOpen(false); }}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors ${
+                          isActiveView('youth') ? 'bg-gold-50 text-diplomatic-900 font-semibold' : 'text-gray-700'
+                        }`}
+                      >
+                        <Users className="w-4 h-4" />
+                        <span>{texts.youthBtn}</span>
+                      </button>
+
+                      <button
+                        onClick={() => { setCurrentView('chatbot'); setIsMoreOpen(false); }}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors ${
+                          isActiveView('chatbot') ? 'bg-gold-50 text-diplomatic-900 font-semibold' : 'text-gray-700'
+                        }`}
+                      >
+                        <Bot className="w-4 h-4" />
+                        <span>{language === 'vi' ? 'Trợ Lý AI' : 'AI Assistant'}</span>
+                      </button>
+
+                      <button
+                        onClick={() => { setCurrentView('knowledge'); setIsMoreOpen(false); }}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors ${
+                          isActiveView('knowledge') ? 'bg-gold-50 text-diplomatic-900 font-semibold' : 'text-gray-700'
+                        }`}
+                      >
+                        <GraduationCap className="w-4 h-4" />
+                        <span>{texts.knowledgeBtn}</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 {currentView !== 'map' && (
                    <button
-                   onClick={() => setCurrentView('map')}
+                   onClick={() => { setCurrentView('map'); setIsMoreOpen(false); }}
                    className="flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm bg-diplomatic-900 text-white hover:bg-diplomatic-800 whitespace-nowrap"
                  >
                    <MapIcon className="w-4 h-4" />
@@ -265,10 +291,11 @@ const App: React.FC = () => {
             {/* Language Toggle */}
             <button 
               onClick={toggleLanguage}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-diplomatic-100 hover:bg-diplomatic-50 transition-colors text-sm font-medium text-diplomatic-900 ml-2 whitespace-nowrap"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-diplomatic-100 bg-white/70 hover:bg-diplomatic-50 transition-colors text-sm font-medium text-diplomatic-900 ml-2 whitespace-nowrap shadow-sm"
             >
               <Languages className="w-4 h-4" />
-              {language === 'vi' ? 'VI' : 'EN'}
+              <span className="hidden sm:inline">{language === 'vi' ? 'Tiếng Việt' : 'English'}</span>
+              <span className="sm:hidden">{language === 'vi' ? 'VI' : 'EN'}</span>
             </button>
           </div>
         </div>
@@ -276,6 +303,7 @@ const App: React.FC = () => {
 
       {/* VIEW ROUTING */}
       <Suspense fallback={<LoadingScreen />}>
+      <div key={currentView} className="flex-grow animate-fade-in">
       {currentView === 'quiz' && quizRegion ? (
         <QuizPage 
           region={quizRegion} 
@@ -319,15 +347,26 @@ const App: React.FC = () => {
         // MAP VIEW DEFAULT
         <>
           {/* Hero Description */}
-          <div className="bg-white border-b border-gray-100 py-6 px-4 text-center animate-fade-in">
+          <div className="bg-gradient-to-r from-white via-slate-50 to-blue-50 border-b border-gray-100 py-6 px-4 text-center">
              <h2 className="text-2xl md:text-3xl font-serif font-bold text-diplomatic-900 mb-2 sm:hidden">{texts.title}</h2>
              <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base leading-relaxed">
                 {texts.subtitle}
               </p>
+              <div className="mt-4 flex flex-wrap justify-center gap-3 text-xs md:text-sm">
+                <div className="px-3 py-1 rounded-full bg-white shadow-sm border border-diplomatic-100 text-diplomatic-900 font-medium">
+                  7+ {language === 'vi' ? 'Đối tác chiến lược toàn diện' : 'Comprehensive strategic partners'}
+                </div>
+                <div className="px-3 py-1 rounded-full bg-white shadow-sm border border-gold-200 text-amber-700 font-medium">
+                  16 FTA · {language === 'vi' ? 'Cửa ngõ 200+ thị trường' : 'Gateway to 200+ markets'}
+                </div>
+                <div className="px-3 py-1 rounded-full bg-white shadow-sm border border-slate-200 text-slate-700 font-medium">
+                  {language === 'vi' ? 'Hơn 200.000 du học sinh & chuyên gia' : '200,000+ students & experts abroad'}
+                </div>
+              </div>
           </div>
 
           {/* Main Content: Split View for better Web/Mobile capability */}
-          <main className="flex-grow container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8 animate-fade-in overflow-hidden">
+          <main className="flex-grow container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8 overflow-hidden">
             
             {/* Left: Quick Access List (Better for Accessibility & Mobile) */}
             <div className="lg:w-1/4 order-2 lg:order-1">
@@ -372,6 +411,7 @@ const App: React.FC = () => {
           </main>
         </>
       )}
+      </div>
       </Suspense>
 
       {/* Footer (Only show on Map or Knowledge view) */}
