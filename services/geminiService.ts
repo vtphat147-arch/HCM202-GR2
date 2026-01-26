@@ -5,7 +5,18 @@ import { RegionContentResponse, Language, QuizQuestion, RegionID } from "../type
 // Prefer Groq if available (to avoid Gemini quota limits). Fall back to Gemini.
 const groqApiKey = import.meta.env.VITE_GROQ_API_KEY;
 const useGroq = Boolean(groqApiKey);
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY });
+
+// Lazy initialization for Gemini
+let geminiInstance: GoogleGenAI | null = null;
+const getGemini = () => {
+  if (!geminiInstance) {
+    const apiKey = import.meta.env.VITE_API_KEY;
+    if (apiKey) {
+      geminiInstance = new GoogleGenAI({ apiKey });
+    }
+  }
+  return geminiInstance;
+};
 
 type GroqChatResponse = {
   choices?: Array<{
@@ -19,13 +30,13 @@ const sanitizeJsonContent = (content: string): string => {
   if (text.startsWith("```")) {
     text = text.replace(/^```[a-zA-Z]*\s*/, "").replace(/```$/gm, "").trim();
   }
-  
+
   // Try to extract JSON array/object if wrapped in text
   const jsonMatch = text.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
   if (jsonMatch) {
     text = jsonMatch[1];
   }
-  
+
   return text;
 };
 
@@ -197,8 +208,8 @@ const quizCache: Record<string, QuizQuestion[]> = {};
 
 // Function returns static data immediately
 export const fetchRegionDetails = async (
-  regionId: string, 
-  regionName: string, 
+  regionId: string,
+  regionName: string,
   language: Language
 ): Promise<RegionContentResponse> => {
   // Simulate an async operation for consistency, though it resolves instantly
@@ -226,19 +237,19 @@ export const fetchRegionQuiz = async (
   language: Language
 ): Promise<QuizQuestion[]> => {
   const cacheKey = `${regionName}-${language}`;
-  
+
   if (quizCache[cacheKey]) {
     return quizCache[cacheKey];
   }
-  
+
   // No API keys at all -> return empty to avoid crash
   if (!groqApiKey && !import.meta.env.VITE_API_KEY) {
     return [];
   }
 
   try {
-    const langInstruction = language === 'vi' 
-      ? "Ngôn ngữ: Tiếng Việt. Tất cả câu hỏi, đáp án và giải thích phải bằng tiếng Việt." 
+    const langInstruction = language === 'vi'
+      ? "Ngôn ngữ: Tiếng Việt. Tất cả câu hỏi, đáp án và giải thích phải bằng tiếng Việt."
       : "Language: English. All questions, options, and explanations must be in English.";
 
     // Map region names to full context for better AI understanding
@@ -296,7 +307,7 @@ export const fetchRegionQuiz = async (
     const parseQuizResponse = (content: string): QuizQuestion[] => {
       const sanitized = sanitizeJsonContent(content);
       let parsed: any;
-      
+
       try {
         parsed = JSON.parse(sanitized);
       } catch (e) {
@@ -312,13 +323,13 @@ export const fetchRegionQuiz = async (
           return [];
         }
       }
-      
+
       const list = Array.isArray(parsed) ? parsed : parsed?.questions || parsed?.data || [];
       if (!Array.isArray(list) || list.length === 0) {
         console.warn(`[Quiz Empty] No questions found for ${regionName}`);
         return [];
       }
-      
+
       // Validate and clean questions
       const cleaned = list
         .filter((q: any) => q && q.question && Array.isArray(q.options) && q.options.length >= 2 && typeof q.correctAnswerIndex === 'number')
@@ -330,11 +341,11 @@ export const fetchRegionQuiz = async (
           explanation: String(q.explanation || '').trim()
         }))
         .filter((q: QuizQuestion) => q.question && q.options.length >= 2);
-      
+
       if (cleaned.length === 0) {
         console.warn(`[Quiz Validation Failed] No valid questions after cleaning for ${regionName}`);
       }
-      
+
       return cleaned;
     };
 
@@ -350,6 +361,11 @@ export const fetchRegionQuiz = async (
           console.log(`[Quiz] Parsed ${questions.length} questions for ${regionName}`);
           if (questions.length >= 5) break; // Success if we got at least 5 questions
         } else {
+          const ai = getGemini();
+          if (!ai) {
+            console.warn("[Quiz] Gemini API key missing, skipping Gemini attempt");
+            continue;
+          }
           console.log(`[Quiz] Fetching for ${regionName} via Gemini (attempt ${attempt + 1})...`);
           const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
@@ -401,7 +417,7 @@ export const fetchRegionQuiz = async (
       console.warn(`[Quiz Partial] Only got ${questions.length} questions for ${regionName}, expected 10`);
       quizCache[cacheKey] = questions;
     }
-    
+
     return questions;
 
   } catch (error) {
@@ -412,20 +428,25 @@ export const fetchRegionQuiz = async (
 
 export const chatWithAI = async (message: string, language: Language): Promise<string> => {
   if (!groqApiKey && !import.meta.env.VITE_API_KEY) {
-    return language === 'vi' 
-      ? "Vui lòng cấu hình API Key để sử dụng tính năng này." 
+    return language === 'vi'
+      ? "Vui lòng cấu hình API Key để sử dụng tính năng này."
       : "Please configure the API Key to use this feature.";
   }
 
   try {
-    const langInstruction = language === 'vi' 
-      ? "Bạn là một chuyên gia AI cao cấp về quan hệ quốc tế, ngoại giao, kinh tế và lịch sử Việt Nam. Hãy cung cấp câu trả lời chi tiết, sâu sắc, có dẫn chứng số liệu và phân tích bối cảnh cụ thể. Bạn CHỈ trả lời các câu hỏi thuộc lĩnh vực này. Nếu câu hỏi không liên quan (giải toán, code, giải trí...), hãy lịch sự từ chối và hướng người dùng về chủ đề chính." 
+    const langInstruction = language === 'vi'
+      ? "Bạn là một chuyên gia AI cao cấp về quan hệ quốc tế, ngoại giao, kinh tế và lịch sử Việt Nam. Hãy cung cấp câu trả lời chi tiết, sâu sắc, có dẫn chứng số liệu và phân tích bối cảnh cụ thể. Bạn CHỈ trả lời các câu hỏi thuộc lĩnh vực này. Nếu câu hỏi không liên quan (giải toán, code, giải trí...), hãy lịch sự từ chối và hướng người dùng về chủ đề chính."
       : "You are a senior AI expert in Vietnam's international relations, diplomacy, economy, and history. Please provide detailed, profound answers with specific data and context analysis. You ONLY answer questions within this domain. If the question is unrelated (math, coding, entertainment...), politely refuse and guide the user back to the main topic.";
 
     const prompt = `${langInstruction}\n\nUser: ${message}\nAI:`;
 
     if (useGroq) {
       return await callGroq(prompt);
+    }
+
+    const ai = getGemini();
+    if (!ai) {
+      throw new Error("Gemini API Key missing");
     }
 
     const response = await ai.models.generateContent({
