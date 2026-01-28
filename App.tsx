@@ -14,8 +14,8 @@ const CooperationFieldsPage = React.lazy(() => import('./components/CooperationF
 const TimelinePage = React.lazy(() => import('./components/TimelinePage'));
 const NewsPage = React.lazy(() => import('./components/NewsPage'));
 const YouthPage = React.lazy(() => import('./components/YouthPage'));
-const ChatbotPage = React.lazy(() => import('./components/ChatbotPage'));
 const DocumentPage = React.lazy(() => import('./components/DocumentPage'));
+import ChatWidget from './components/ChatWidget';
 
 // Static configuration for regions (Positions and basic info)
 const RAW_REGIONS = [
@@ -66,7 +66,7 @@ const RAW_REGIONS = [
   },
 ];
 
-type ViewState = 'map' | 'knowledge' | 'quiz' | 'dashboard' | 'cooperation' | 'timeline' | 'news' | 'youth' | 'chatbot' | 'document';
+type ViewState = 'map' | 'knowledge' | 'quiz' | 'dashboard' | 'cooperation' | 'timeline' | 'news' | 'youth' | 'document';
 
 const LoadingScreen = () => (
   <div className="flex items-center justify-center min-h-[60vh] w-full">
@@ -80,7 +80,7 @@ const LoadingScreen = () => (
 const App: React.FC = () => {
   const [activeRegionId, setActiveRegionId] = useState<string | null>(null);
   const [language, setLanguage] = useState<Language>('vi');
-  const [currentView, setCurrentView] = useState<ViewState>('map');
+  const [currentView, setCurrentView] = useState<ViewState>('document');
   const [quizRegionId, setQuizRegionId] = useState<string | null>(null); // Track which region is being quizzed
   const [isMoreOpen, setIsMoreOpen] = useState(false);
 
@@ -123,10 +123,12 @@ const App: React.FC = () => {
   };
 
   const texts = {
-    title: language === 'vi' ? 'Kết Nối Quốc Tế Của Việt Nam' : 'Vietnam International Connections',
+    title: language === 'vi'
+      ? 'KẾT NỐI VIỆT NAM'
+      : 'VIETNAM CONNECTIONS',
     subtitle: language === 'vi'
-      ? 'Khám phá hành trình hội nhập và các mối quan hệ ngoại giao chiến lược của Việt Nam trong kỷ nguyên mới.'
-      : 'Discover Vietnam\'s integration journey and strategic diplomatic partnerships in the new era.',
+      ? '"Đoàn kết, đoàn kết, đại đoàn kết. Thành công, thành công, đại thành công."'
+      : '"Unity, unity, great unity. Success, success, great unity."',
     mapLegendTitle: language === 'vi' ? 'Bản đồ Tương tác' : 'Interactive Map',
     mapLegendDesc: language === 'vi'
       ? 'Nhấp vào các điểm đánh dấu trên bản đồ.'
@@ -152,7 +154,7 @@ const App: React.FC = () => {
         <div className="container mx-auto px-4 py-3 flex justify-between items-center gap-3">
           <div
             className="flex items-center gap-3 cursor-pointer group"
-            onClick={() => setCurrentView('map')}
+            onClick={() => setCurrentView('document')}
           >
             <div className="relative">
               <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gold-400/50 to-diplomatic-900/40 blur-sm opacity-60 group-hover:opacity-90 transition-opacity" />
@@ -165,10 +167,10 @@ const App: React.FC = () => {
                 {texts.title}
               </h1>
               <h1 className="text-base font-serif font-bold text-diplomatic-900 uppercase tracking-wide sm:hidden">
-                VN Connections
+                {language === 'vi' ? 'KẾT NỐI VN' : 'VN CONNECT'}
               </h1>
               <p className="hidden md:block text-[11px] font-medium text-slate-500">
-                {language === 'vi' ? 'Ngoại giao · Kinh tế · Thanh niên' : 'Diplomacy · Economy · Youth'}
+                {language === 'vi' ? 'Việt Nam & Thế giới' : 'Vietnam & World'}
               </p>
             </div>
           </div>
@@ -177,6 +179,17 @@ const App: React.FC = () => {
             {/* View Switcher Buttons (Only show if not in Quiz mode) */}
             {currentView !== 'quiz' && (
               <>
+                <button
+                  onClick={() => { setCurrentView('map'); setIsMoreOpen(false); }}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-bold text-sm shadow-md whitespace-nowrap ${isActiveView('map')
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-blue-200'
+                    : 'bg-white text-gray-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-500 hover:text-white border border-gray-200'
+                    }`}
+                >
+                  <MapIcon className="w-4 h-4" />
+                  <span className="hidden lg:inline uppercase tracking-wider">{texts.mapBtn}</span>
+                </button>
+
                 {/* Primary views */}
                 <button
                   onClick={() => { setCurrentView('timeline'); setIsMoreOpen(false); }}
@@ -218,7 +231,7 @@ const App: React.FC = () => {
                 <div className="relative">
                   <button
                     onClick={() => setIsMoreOpen(prev => !prev)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm whitespace-nowrap border ${isActiveView('cooperation') || isActiveView('youth') || isActiveView('chatbot') || isActiveView('knowledge')
+                    className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm whitespace-nowrap border ${isActiveView('cooperation') || isActiveView('youth') || isActiveView('knowledge')
                       ? 'bg-slate-900 text-white border-slate-900'
                       : 'bg-white text-gray-700 hover:bg-gray-100 border-gray-200'
                       }`}
@@ -249,14 +262,7 @@ const App: React.FC = () => {
                         <span>{texts.youthBtn}</span>
                       </button>
 
-                      <button
-                        onClick={() => { setCurrentView('chatbot'); setIsMoreOpen(false); }}
-                        className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors ${isActiveView('chatbot') ? 'bg-gold-50 text-diplomatic-900 font-semibold' : 'text-gray-700'
-                          }`}
-                      >
-                        <Bot className="w-4 h-4" />
-                        <span>{language === 'vi' ? 'Trợ Lý AI' : 'AI Assistant'}</span>
-                      </button>
+
 
                       <button
                         onClick={() => { setCurrentView('knowledge'); setIsMoreOpen(false); }}
@@ -267,28 +273,10 @@ const App: React.FC = () => {
                         <span>{texts.knowledgeBtn}</span>
                       </button>
 
-                      <button
-                        onClick={() => { setCurrentView('document'); setIsMoreOpen(false); }}
-                        className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors ${isActiveView('document') ? 'bg-gold-50 text-diplomatic-900 font-semibold' : 'text-gray-700'
-                          }`}
-                      >
-                        {/* Using BookOpen but styled differently or another icon like FileText */}
-                        <BookOpen className="w-4 h-4" />
-                        <span>{language === 'vi' ? 'Tư liệu' : 'Documents'}</span>
-                      </button>
                     </div>
                   )}
                 </div>
 
-                {currentView !== 'map' && (
-                  <button
-                    onClick={() => { setCurrentView('map'); setIsMoreOpen(false); }}
-                    className="flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-sm shadow-sm bg-diplomatic-900 text-white hover:bg-diplomatic-800 whitespace-nowrap"
-                  >
-                    <MapIcon className="w-4 h-4" />
-                    <span className="hidden lg:inline">{texts.mapBtn}</span>
-                  </button>
-                )}
               </>
             )}
 
@@ -340,10 +328,7 @@ const App: React.FC = () => {
                 <main className="flex-grow container mx-auto px-4 py-8">
                   <YouthPage language={language} onBack={() => setCurrentView('map')} />
                 </main>
-              ) : currentView === 'chatbot' ? (
-                <main className="flex-grow container mx-auto px-4 py-8">
-                  <ChatbotPage language={language} onBack={() => setCurrentView('map')} />
-                </main>
+
               ) : currentView === 'knowledge' ? (
                 <main className="flex-grow container mx-auto px-4 py-8">
                   <KnowledgePage
@@ -363,8 +348,8 @@ const App: React.FC = () => {
                 <>
                   {/* Hero Description */}
                   <div className="bg-gradient-to-r from-white via-slate-50 to-blue-50 border-b border-gray-100 py-6 px-4 text-center">
-                    <h2 className="text-2xl md:text-3xl font-serif font-bold text-diplomatic-900 mb-2 sm:hidden">{texts.title}</h2>
-                    <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base leading-relaxed">
+                    <h2 className="text-xl md:text-2xl font-serif font-bold text-diplomatic-900 mb-3 sm:hidden leading-snug">{texts.title}</h2>
+                    <p className="text-diplomatic-800 font-serif italic max-w-3xl mx-auto text-base md:text-xl leading-relaxed">
                       {texts.subtitle}
                     </p>
                     <div className="mt-4 flex flex-wrap justify-center gap-3 text-xs md:text-sm">
@@ -451,6 +436,10 @@ const App: React.FC = () => {
           />
         )}
       </AnimatePresence>
+
+      {/* Global Chat Widget */}
+      <ChatWidget language={language} />
+
     </div>
   );
 };

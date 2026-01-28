@@ -1,0 +1,160 @@
+🎤 SCRIPT GIỚI THIỆU SẢN PHẨM
+“ĐẤU TRANH GIAI CẤP” – TRẢI NGHIỆM GIÁO DỤC TƯƠNG TÁC VỀ CNXH KHOA HỌC 
+
+🎬 MỞ ĐẦU (30 giây) - Phat
+Kính thưa quý thầy  và các bạn,
+Trong quá trình học Chủ nghĩa Xã hội Khoa học, chúng ta thường tiếp cận môn học này qua sách giáo khoa, slide PowerPoint hoặc bài giảng lý thuyết.
+Tuy nhiên, đây là một môn học rất giàu tính vận động, mâu thuẫn và lịch sử, nếu chỉ “đọc” thì rất khó cảm nhận được bản chất của nó.
+Vì vậy hôm nay, nhóm chúng tôi xin giới thiệu một cách học hoàn toàn khác:
+👉 không chỉ học – mà là TRẢI NGHIỆM,
+👉 không chỉ nghe – mà là TỰ KHÁM PHÁ,
+đó là sản phẩm:
+“CNXH Khoa Học – Interactive Experience”
+
+🚀 PHẦN 1: GIỚI THIỆU TỔNG QUAN (2 phút)
+Sản phẩm của chúng tôi là một website trải nghiệm tương tác, giúp người học “sống trong lý luận” thay vì chỉ ghi nhớ khái niệm.
+Slogan của sản phẩm là:
+“Khám phá xã hội vận động.”
+Về công nghệ, sản phẩm được xây dựng trên nền tảng hiện đại:
+React + TypeScript để đảm bảo cấu trúc chặt chẽ
+GSAP Animation tạo hiệu ứng điện ảnh
+Nhạc nền Phonk giúp tăng cảm xúc học tập
+Responsive Design, dùng được trên máy tính và điện thoại
+ừu tượng
+Và có tích hợp AI hỗ trợ học tập
+Về triết lý thiết kế:
+Hai màu chủ đạo là Đỏ và Đen, tượng trưng cho cách mạng và chiều sâu tư duy
+Phong cách cinematic – immersive
+Nguyên tắc xuyên suốt là:
+👉 “Show, don’t tell” – trực quan hóa mọi khái niệm tr
+🎭 PHẦN 2: TRÌNH DIỄN CÁC MODULE CHÍNH (8–10 phút)
+🔥 Module 1: INTRO SEQUENCE – Màn mở đầu điện ảnh
+Ngay khi truy cập, người học không thấy nội dung ngay,
+mà bước vào một màn intro giống như đang khởi động một hệ thống nghiên cứu xã hội.
+Có 4 giai đoạn:
+Hệ thống boot lên như terminal
+Phát hiện mâu thuẫn xã hội
+Câu trích dẫn của Marx được “lắp ráp” từ nhiều hướng
+Và cuối cùng là nút “TRUY CẬP”
+👉 Ngay từ đầu, người học đã được nhập vai chứ không còn là người xem thụ động.
+
+🌟 Module 2: HERO SECTION – Particle tương tác
+Ở phần Hero, câu nói nổi tiếng của Marx:
+“Lịch sử của mọi xã hội là lịch sử đấu tranh giai cấp”
+👉 Điều này tượng trưng cho các cá nhân trong xã hội luôn liên kết và tác động lẫn nhau.
+
+Thế những tư tưởng bắt đầu từ đâu  => module 3
+
+📚 Module 3: BA NGUỒN GỐC LÝ LUẬN
+Thay vì liệt kê khô khan, mỗi nguồn gốc được trình bày bằng thẻ accordion tương tác.
+Người học có thể thấy rõ:
+Cái gì được kế thừa
+Và cái gì mang tính cách mạng
+👉 Từ đó hiểu rằng CNXH khoa học không phải tự nhiên xuất hiện, mà là kết quả của sự phát triển tư tưởng
+
+
+🏛️ Module 4: GIẢI MÃ CẤU TRÚC XÃ HỘI - Vy Anh
+Module này có 2 chế độ:
+Một bên là khái niệm
+Một bên là sơ đồ quan hệ trực quan
+Người học có thể click từng tầng để thấy mối liên hệ giữa:
+Lực lượng sản xuất
+Quan hệ sản xuất
+Cơ sở hạ tầng
+Kiến trúc thượng tầng
+👉 Không chỉ học thuộc, mà nhìn thấy cấu trúc xã hội đang vận động.
+
+📊 Module 5: THƯỚC ĐO MÂU THUẪN GIAI CẤP
+Đây là module sinh viên rất thích.
+Người học có thể kéo một thanh trượt từ 0% đến 100%:
+Mức thấp: xã hội ổn định
+Mức trung bình: mâu thuẫn tích tụ
+Mức cao: xuất hiện tình thế cách mạng, với hiệu ứng rung, glitch
+👉 Qua đó hiểu rằng cách mạng không tự nhiên xảy ra, mà là kết quả của mâu thuẫn tích tụ.
+
+🔄 Module 6: QUY LUẬT PHỦ ĐỊNH CỦA PHỦ ĐỊNH
+Quy luật này được thể hiện bằng chuyển động xoắn ốc, kèm ví dụ trong:
+Tự nhiên
+Sinh học
+Tri thức
+Xã hội
+👉 Giúp người học hiểu rằng phát triển không quay lại điểm cũ, mà đi lên ở trình độ cao hơn.
+
+⏳ Module 7: TIMELINE 5 HÌNH THÁI KINH TẾ – XÃ HỘI
+Timeline cho phép scroll và click mở từng giai đoạn:
+Từ cộng sản nguyên thủy
+Đến xã hội cộng sản trong tương lai
+Mỗi giai đoạn đều có:
+Mâu thuẫn cơ bản
+Đặc điểm
+Sự kiện lịch sử
+Trích dẫn tiêu biểu
+
+🎮 Module 8: MÔ PHỎNG QUY LUẬT KINH TẾ
+Người học điều chỉnh 2 thanh trượt:
+Lực lượng sản xuất
+Mức độ tư hữu hóa quan hệ sản xuất
+👉 Và hệ thống tự động trả về hình thái xã hội tương ứng
+Qua đó sinh viên tự chứng minh quy luật:
+Quan hệ sản xuất phải phù hợp với trình độ lực lượng sản xuất.
+
+🌍 Module 9: CASE STUDY THỰC TIỄN
+So sánh các mô hình như:
+Việt Nam
+Liên Xô
+Trung Quốc
+Cuba
+Thụy Điển
+👉 Không né tránh thành công và thất bại,
+giúp sinh viên nhìn CNXH một cách khoa học, không giáo điều.
+
+🔗 Module 10: LÝ LUẬN & THỰC TIỄN - Khoa
+So sánh thế kỷ 19 và thế kỷ 21:
+Tha hóa lao động
+Tích tụ tư bản
+Máy móc và việc làm
+👉 Chứng minh rằng lý luận Marx vẫn còn giá trị trong xã hội hiện đại.
+
+🔍 Module 11: MÂU THUẪN ĐƯƠNG ĐẠI
+Phân tích các vấn đề:
+Grab, Uber
+AI và tự động hóa
+Bất động sản
+👉 Giúp sinh viên thấy đấu tranh giai cấp không biến mất, mà chỉ thay đổi hình thức.
+
+🃏 Module 12: PHÁ VỠ ĐỊNH KIẾN
+Các thẻ lật 3D giúp:
+Đập tan những hiểu lầm phổ biến về CNXH
+Chuyển từ định kiến → hiểu đúng bản chất
+
+🌌 Module 13 & 14: TƯƠNG LAI & TỔNG HỢP
+Kết thúc bằng hình ảnh các hạt riêng lẻ hội tụ lại thành một chỉnh thể,
+kèm câu nói nổi tiếng của Marx về tự do cá nhân và tự do tập thể.
+Sau đó là phần:
+Tổng hợp kiến thức
+Từ điển
+Quiz kiểm tra
+Gamification học tập
+
+💡 PHẦN 3: GIÁ TRỊ SẢN PHẨM (1 phút)
+So với cách học truyền thống:
+Thụ động → Chủ động
+Ghi nhớ → Trải nghiệm
+Khô khan → Cảm xúc
+Sản phẩm giúp:
+Biến lý luận thành trải nghiệm sống
+Kết nối lịch sử với hiện tại
+Phù hợp với Gen Z, cả về hình ảnh lẫn cách học
+
+🎯 KẾT LUẬN (30 giây)
+Kính thưa quý thầy cô và các bạn,
+Với sản phẩm này, chúng tôi không chỉ mong sinh viên hiểu CNXH khoa học,
+mà còn cảm nhận được sức mạnh của lý luận,
+và tự mình đi đến những kết luận khoa học.
+Như Marx đã nói:
+“Các nhà triết học chỉ giải thích thế giới, vấn đề là cải tạo thế giới.”
+Và sản phẩm này chính là cách chúng tôi cải tạo phương pháp học tập –
+từ thụ động sang chủ động,
+từ lý thuyết suông sang trải nghiệm sống động.
+🔴 Xin trân trọng cảm ơn!
+

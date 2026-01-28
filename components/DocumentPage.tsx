@@ -30,28 +30,8 @@ const DocumentPage: React.FC<DocumentPageProps> = ({ language, onBack }) => {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
         >
-            {/* Navbar / Header */}
-            <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
-                <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-                    <button
-                        onClick={onBack}
-                        className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-diplomatic-900 hover:bg-gray-100 rounded-lg transition-all font-medium"
-                    >
-                        <ArrowLeft className="w-5 h-5" />
-                        <span>{texts.back}</span>
-                    </button>
-
-                    <div className="flex items-center gap-2 text-diplomatic-900 font-serif font-bold opacity-0 md:opacity-100 transition-opacity">
-                        <FileText className="w-5 h-5" />
-                        <span className="hidden sm:inline line-clamp-1">{texts.title}</span>
-                    </div>
-
-                    <div className="w-10"></div> {/* Spacer for symmetry */}
-                </div>
-            </header>
-
             {/* Main Content */}
-            <main className="flex-grow container mx-auto px-4 py-8 md:py-12 max-w-4xl">
+            <main className="flex-grow container mx-auto px-4 py-8 md:py-12 max-w-7xl">
 
                 {/* Paper Container */}
                 <article className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 overflow-hidden border border-slate-100">
