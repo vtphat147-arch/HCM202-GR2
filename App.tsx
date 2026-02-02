@@ -16,6 +16,7 @@ const NewsPage = React.lazy(() => import('./components/NewsPage'));
 const YouthPage = React.lazy(() => import('./components/YouthPage'));
 const DocumentPage = React.lazy(() => import('./components/DocumentPage'));
 import ChatWidget from './components/ChatWidget';
+import AboutModal from './components/AboutModal'; // Import new modal
 
 // Static configuration for regions (Positions and basic info)
 const RAW_REGIONS = [
@@ -83,6 +84,7 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>('document');
   const [quizRegionId, setQuizRegionId] = useState<string | null>(null); // Track which region is being quizzed
   const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const [showAbout, setShowAbout] = useState(false); // State for About Modal
 
   // Derived regions data based on language
   const regions: RegionData[] = RAW_REGIONS.map(r => ({
@@ -273,6 +275,16 @@ const App: React.FC = () => {
                         <span>{texts.knowledgeBtn}</span>
                       </button>
 
+                      <div className="h-px bg-gray-100 my-1 mx-2"></div>
+
+                      <button
+                        onClick={() => { setShowAbout(true); setIsMoreOpen(false); }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors text-gray-700"
+                      >
+                        <Users className="w-4 h-4" />
+                        <span>{language === 'vi' ? 'Thành viên & AI' : 'Team & AI'}</span>
+                      </button>
+
                     </div>
                   )}
                 </div>
@@ -438,6 +450,11 @@ const App: React.FC = () => {
       </AnimatePresence>
 
       {/* Global Chat Widget */}
+      <AboutModal
+        isOpen={showAbout}
+        onClose={() => setShowAbout(false)}
+        language={language}
+      />
       <ChatWidget language={language} />
 
     </div>
