@@ -14,15 +14,15 @@ const KnowledgePage: React.FC<KnowledgePageProps> = ({ language, onBack, onStart
 
   const texts = {
     title: isVi ? 'Vận Dụng Tư Tưởng Hồ Chí Minh' : 'Applying Ho Chi Minh\'s Ideology',
-    subtitle: isVi 
+    subtitle: isVi
       ? 'Về đại đoàn kết toàn dân tộc và đoàn kết quốc tế trong giai đoạn hiện nay'
       : 'On great national unity and international solidarity in the current period',
     back: isVi ? 'Quay lại Bản đồ' : 'Back to Map',
     section1: isVi ? '1. Chủ trương & Đường lối' : '1. Guidelines & Policies',
-    section2: isVi ? '2. Liên minh Công - Nông - Trí' : '2. Worker-Peasant-Intellectual Alliance',
-    section3: isVi ? '3. Đoàn kết Quốc tế' : '3. International Solidarity',
-    quote: isVi 
-      ? '"Trước đây, sức mạnh đại đoàn kết là để chiến thắng giặc ngoại xâm. Hiện nay, sức mạnh ấy phải là sức mạnh để chiến thắng nghèo nàn và lạc hậu."'
+    section2: isVi ? '2. Xây dựng khối đại đoàn kết toàn dân tộc' : '2. Building the great national unity bloc',
+    section3: isVi ? '3. Kết hợp Sức mạnh Dân tộc & Quốc tế' : '3. Combining National & International Strength',
+    quote: isVi
+      ? '"Trước đây, sức mạnh của khối đại đoàn kết toàn dân tộc là sức mạnh để chiến thắng giặc ngoại xâm. Hiện nay, sức mạnh ấy phải là sức mạnh để chiến thắng nghèo nàn và lạc hậu."'
       : '"Previously, the power of great unity was to defeat foreign invaders. Now, that power must be the power to defeat poverty and backwardness."',
     corePrinciplesTitle: isVi ? 'Nguyên tắc Cốt lõi' : 'Core Principles',
     tasksTitle: isVi ? '5 Nhiệm vụ tăng cường khối Đại đoàn kết:' : '5 Tasks to strengthen Great Unity:',
@@ -34,34 +34,34 @@ const KnowledgePage: React.FC<KnowledgePageProps> = ({ language, onBack, onStart
   };
 
   const timelineData = [
-    { 
-      title: isVi ? 'Nghị quyết 07-NQ/TW (1993)' : 'Resolution 07-NQ/TW (1993)', 
-      desc: isVi ? 'Về đại đoàn kết dân tộc và tăng cường Mặt trận dân tộc thống nhất.' : 'On great national unity and strengthening the United National Front.' 
+    {
+      title: isVi ? 'Nghị quyết 07-NQ/TW (1993)' : 'Resolution 07-NQ/TW (1993)',
+      desc: isVi ? 'Về đại đoàn kết dân tộc và tăng cường Mặt trận dân tộc thống nhất.' : 'On great national unity and strengthening the United National Front.'
     },
-    { 
-      title: isVi ? 'Đại hội VIII (1996)' : 'VIII Congress (1996)', 
-      desc: isVi ? 'Phát huy sức mạnh toàn dân trong thời kỳ công nghiệp hóa, hiện đại hóa.' : 'Promoting the power of the whole people in the period of industrialization and modernization.' 
+    {
+      title: isVi ? 'Đại hội VIII (1996)' : 'VIII Congress (1996)',
+      desc: isVi ? 'Phát huy sức mạnh toàn dân trong thời kỳ công nghiệp hóa, hiện đại hóa.' : 'Promoting the power of the whole people in the period of industrialization and modernization.'
     },
-    { 
-      title: isVi ? 'Đại hội XII' : 'XII Congress', 
-      desc: isVi ? 'Đại đoàn kết là đường lối chiến lược, là động lực và nguồn lực to lớn.' : 'Great unity is a strategic line, a great driving force and resource.' 
+    {
+      title: isVi ? 'Đại hội XII' : 'XII Congress',
+      desc: isVi ? 'Đại đoàn kết là đường lối chiến lược, là động lực và nguồn lực to lớn.' : 'Great unity is a strategic line, a great driving force and resource.'
     },
-    { 
-      title: isVi ? 'Đại hội XIII' : 'XIII Congress', 
-      desc: isVi ? 'Đất nước chưa bao giờ có được cơ đồ, tiềm lực, vị thế và uy tín quốc tế như hiện nay.' : 'The country has never had such fortune, potential, position, and international prestige as it does today.' 
+    {
+      title: isVi ? 'Đại hội XIII' : 'XIII Congress',
+      desc: isVi ? 'Đất nước chưa bao giờ có được cơ đồ, tiềm lực, vị thế và uy tín quốc tế như hiện nay.' : 'The country has never had such fortune, potential, position, and international prestige as it does today.'
     }
   ];
 
   const corePrinciples = [
     isVi ? 'Nền tảng: Liên minh Công nhân - Nông dân - Trí thức.' : 'Foundation: Worker - Peasant - Intellectual Alliance.',
     isVi ? 'Dưới sự lãnh đạo vững chắc của Đảng Cộng sản.' : 'Under the firm leadership of the Communist Party.',
-    isVi ? 'Mặt trận càng rộng -> Liên minh càng mạnh -> Lãnh đạo càng vững.' : 'Broader Front -> Stronger Alliance -> Firmer Leadership.'
+    isVi ? 'Mặt trận càng rộng rãi -> Liên minh càng mạnh -> Lãnh đạo càng vững.' : 'Broader Front -> Stronger Alliance -> Firmer Leadership.'
   ];
 
   const tasks = [
     isVi ? "Đẩy mạnh tuyên truyền, nâng cao nhận thức về đại đoàn kết." : "Promote propaganda, raise awareness about great unity.",
     isVi ? "Tăng cường lãnh đạo của Đảng, quản lý Nhà nước, thể chế hóa chính sách." : "Strengthen Party leadership, State management, institutionalize policies.",
-    isVi ? "Giải quyết hài hòa quan hệ lợi ích (cá nhân - tập thể - xã hội)." : "Harmoniously resolve interest relationships (individual - collective - social).",
+    isVi ? "Giải quyết hài hòa lợi ích giữa các giai cấp, tầng lớp xã hội." : "Harmoniously resolve interests between classes and social strata.",
     isVi ? "Tăng cường quan hệ mật thiết giữa Nhân dân với Đảng, Nhà nước." : "Strengthen close relations between the People and the Party, State.",
     isVi ? "Kiên quyết đấu tranh với các quan điểm sai trái, thù địch, chia rẽ." : "Resolutely struggle against wrong, hostile, divisive views."
   ];
@@ -70,14 +70,14 @@ const KnowledgePage: React.FC<KnowledgePageProps> = ({ language, onBack, onStart
     { congress: isVi ? 'ĐH VII' : 'VII Congress', text: isVi ? '"Muốn là bạn"' : '"Wants to be a friend"' },
     { congress: isVi ? 'ĐH VIII' : 'VIII Congress', text: isVi ? '"Sẵn sàng là bạn"' : '"Ready to be a friend"' },
     { congress: isVi ? 'ĐH IX' : 'IX Congress', text: isVi ? '"Là bạn và đối tác tin cậy"' : '"Friend and reliable partner"' },
-    { congress: isVi ? 'ĐH XII, XIII' : 'XII, XIII Congress', text: isVi ? '"Hội nhập sâu rộng, vị thế uy tín quốc tế nâng cao"' : '"Deep integration, elevated international status and prestige"', highlight: true }
+    { congress: isVi ? 'ĐH XII, XIII' : 'XII, XIII Congress', text: isVi ? '"Chủ động và tích cực hội nhập quốc tế"' : '"Proactive and active international integration"', highlight: true }
   ];
 
   const lessons = [
     isVi ? "Mục tiêu: Dân giàu, nước mạnh, dân chủ, công bằng, văn minh." : "Goal: Wealthy people, strong country, democracy, justice, civilization.",
     isVi ? "Mở cửa, hội nhập, là bạn của tất cả, tham gia vấn đề toàn cầu." : "Open door, integration, friend to all, participate in global issues.",
     isVi ? "Độc lập tự chủ, tự lực tự cường + Sức mạnh thời đại." : "Independence, self-reliance + Power of the times.",
-    isVi ? "Xây dựng Đảng trong sạch, vững mạnh làm hạt nhân đoàn kết." : "Build a clean, strong Party as the nucleus of unity."
+    isVi ? "Xây dựng Đảng trong sạch, vững mạnh làm hạt nhân đoàn kết toàn dân tộc và quốc tế." : "Build a clean, strong Party as the nucleus of national and international unity."
   ];
 
   return (
@@ -86,7 +86,7 @@ const KnowledgePage: React.FC<KnowledgePageProps> = ({ language, onBack, onStart
       <div className="bg-diplomatic-900 text-white py-12 px-6 rounded-3xl mb-8 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-        
+
         <div className="relative z-10 text-center max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-gold-400 text-sm font-bold mb-4 border border-white/20">
             <Star className="w-4 h-4" />
@@ -102,7 +102,7 @@ const KnowledgePage: React.FC<KnowledgePageProps> = ({ language, onBack, onStart
       </div>
 
       <div className="max-w-6xl mx-auto px-4 space-y-12">
-        
+
         {/* SECTION 1: POLICY TIMELINE */}
         <section>
           <div className="flex items-center gap-3 mb-6">
@@ -116,7 +116,7 @@ const KnowledgePage: React.FC<KnowledgePageProps> = ({ language, onBack, onStart
             <p className="text-gray-600 mb-6 italic border-l-4 border-gold-500 pl-4 py-2 bg-yellow-50 rounded-r-lg">
               {texts.quote}
             </p>
-            
+
             {/* Timeline */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {timelineData.map((item, idx) => (
@@ -217,15 +217,15 @@ const KnowledgePage: React.FC<KnowledgePageProps> = ({ language, onBack, onStart
             <div className="absolute top-[-50%] left-[-10%] w-96 h-96 bg-gold-500 rounded-full blur-3xl"></div>
             <div className="absolute bottom-[-50%] right-[-10%] w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
           </div>
-          
+
           <div className="relative z-10 max-w-2xl mx-auto">
             <div className="inline-block p-3 bg-white/10 rounded-full mb-4">
               <Target className="w-8 h-8 text-gold-400" />
             </div>
             <h3 className="text-2xl md:text-3xl font-bold mb-3">{texts.quizTitle}</h3>
             <p className="text-blue-100 mb-8 text-lg">{texts.quizDesc}</p>
-            
-            <button 
+
+            <button
               onClick={onStartQuiz}
               className="px-8 py-3 bg-gold-500 hover:bg-gold-400 text-diplomatic-900 font-bold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center gap-2 mx-auto"
             >

@@ -54,7 +54,7 @@ const RAW_REGIONS = [
       vi: "Gia đình khu vực, nền tảng cho sự ổn định, hòa bình và thịnh vượng chung của Đông Nam Á.",
       en: "Regional family, foundation for stability, peace, and shared prosperity of Southeast Asia."
     },
-    coordinates: { top: '55%', left: '78%' }, // SE Asia
+    coordinates: { top: '65%', left: '78%' }, // SE Asia
   },
   {
     id: RegionID.APEC,
@@ -64,6 +64,62 @@ const RAW_REGIONS = [
       en: "Leading economic cooperation forum, promoting trade and investment liberalization."
     },
     coordinates: { top: '38%', left: '90%' }, // Pacific / General representation
+  },
+  {
+    id: RegionID.NORTHEAST_ASIA,
+    name: { vi: "Đông Bắc Á", en: "Northeast Asia" },
+    shortDescription: {
+      vi: "Khu vực đối tác chiến lược quan trọng nhất: Trung Quốc, Nhật Bản, Hàn Quốc.",
+      en: "Most important strategic partner region: China, Japan, South Korea."
+    },
+    coordinates: { top: '45%', left: '72%' }, // Central location
+    subRegions: [
+      {
+        id: RegionID.CHINA,
+        name: { vi: "Trung Quốc", en: "China" },
+        shortDescription: {
+          vi: "Đối tác thương mại lớn nhất, láng giềng hữu nghị 'núi liền núi, sông liền sông'.",
+          en: "Largest trading partner, friendly neighbor 'sharing mountains and rivers'."
+        },
+        coordinates: { top: '-60px', left: '-60px' }, // Relative offset
+      },
+      {
+        id: RegionID.JAPAN,
+        name: { vi: "Nhật Bản", en: "Japan" },
+        shortDescription: {
+          vi: "Đối tác ODA lớn nhất, hợp tác sâu rộng về công nghiệp và lao động.",
+          en: "Largest ODA donor, extensive cooperation in industry and labor."
+        },
+        coordinates: { top: '0px', left: '70px' }, // Relative offset
+      },
+      {
+        id: RegionID.KOREA,
+        name: { vi: "Hàn Quốc", en: "South Korea" },
+        shortDescription: {
+          vi: "Nhà đầu tư FDI số 1, giao lưu văn hóa và nhân dân mạnh mẽ.",
+          en: "No.1 FDI investor, strong cultural and people-to-people exchange."
+        },
+        coordinates: { top: '60px', left: '-20px' }, // Relative offset
+      }
+    ]
+  },
+  {
+    id: RegionID.USA,
+    name: { vi: "Hoa Kỳ", en: "USA" },
+    shortDescription: {
+      vi: "Đối tác Chiến lược Toàn diện, thị trường xuất khẩu lớn nhất của Việt Nam.",
+      en: "Comprehensive Strategic Partner, Vietnam's largest export market."
+    },
+    coordinates: { top: '48%', left: '18%' },
+  },
+  {
+    id: RegionID.RUSSIA,
+    name: { vi: "Liên Bang Nga", en: "Russia" },
+    shortDescription: {
+      vi: "Đối tác truyền thống tin cậy, hợp tác năng lượng và kỹ thuật quân sự.",
+      en: "Trusted traditional partner, cooperation in energy and military technology."
+    },
+    coordinates: { top: '30%', left: '75%' },
   },
 ];
 
@@ -84,17 +140,24 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>('document');
   const [quizRegionId, setQuizRegionId] = useState<string | null>(null); // Track which region is being quizzed
   const [isMoreOpen, setIsMoreOpen] = useState(false);
-  const [showAbout, setShowAbout] = useState(false); // State for About Modal
+  const [activeModalMember, setActiveModalMember] = useState<string | null>(null); // State for About Modal Member (or 'GENERAL')
 
   // Derived regions data based on language
   const regions: RegionData[] = RAW_REGIONS.map(r => ({
     id: r.id,
     name: language === 'vi' ? r.name.vi : r.name.en,
     shortDescription: language === 'vi' ? r.shortDescription.vi : r.shortDescription.en,
-    coordinates: r.coordinates
+    coordinates: r.coordinates,
+    subRegions: r.subRegions ? r.subRegions.map(sub => ({
+      id: sub.id,
+      name: language === 'vi' ? sub.name.vi : sub.name.en,
+      shortDescription: language === 'vi' ? sub.shortDescription.vi : sub.shortDescription.en,
+      coordinates: sub.coordinates
+    })) : undefined
   }));
 
-  const activeRegion = regions.find(r => r.id === activeRegionId);
+  const activeRegion = regions.find(r => r.id === activeRegionId) ||
+    regions.flatMap(r => r.subRegions || []).find(sub => sub.id === activeRegionId);
 
   // Handle special quiz case for Knowledge Page
   const HCM_IDEOLOGY_QUIZ_ID = 'HCM_IDEOLOGY';
@@ -278,7 +341,7 @@ const App: React.FC = () => {
                       <div className="h-px bg-gray-100 my-1 mx-2"></div>
 
                       <button
-                        onClick={() => { setShowAbout(true); setIsMoreOpen(false); }}
+                        onClick={() => { setActiveModalMember('GENERAL'); setIsMoreOpen(false); }}
                         className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors text-gray-700"
                       >
                         <Users className="w-4 h-4" />
@@ -431,9 +494,30 @@ const App: React.FC = () => {
 
       {/* Footer (Only show on Map or Knowledge view) */}
       {currentView !== 'quiz' && (
-        <footer className="bg-diplomatic-900 text-white py-6 text-center text-xs md:text-sm mt-auto">
-          <p>{texts.footer} &copy; {new Date().getFullYear()}</p>
-          <p className="opacity-60 text-[10px] mt-2">Powered by React & Google Gemini</p>
+        <footer className="bg-diplomatic-900 text-blue-200 py-6 text-center text-sm border-t border-white/10 mt-auto">
+          <p className="mb-2 opacity-80">{texts.footer}</p>
+          <div className="inline-flex flex-wrap justify-center gap-4 text-xs font-bold text-gold-500 uppercase tracking-wider">
+            <button
+              onClick={() => setActiveModalMember('SE181767')}
+              className="hover:text-gold-300 transition-colors cursor-pointer"
+            >
+              Võ Thành Phát (SE181767)
+            </button>
+            <span className="text-white/20">•</span>
+            <button
+              onClick={() => setActiveModalMember('SE181689')}
+              className="hover:text-gold-300 transition-colors cursor-pointer"
+            >
+              Lương Công Khoa (SE181689)
+            </button>
+            <span className="text-white/20">•</span>
+            <button
+              onClick={() => setActiveModalMember('SE173621')}
+              className="hover:text-gold-300 transition-colors cursor-pointer"
+            >
+              Nguyễn Phú Cường (SE173621)
+            </button>
+          </div>
         </footer>
       )}
 
@@ -451,9 +535,10 @@ const App: React.FC = () => {
 
       {/* Global Chat Widget */}
       <AboutModal
-        isOpen={showAbout}
-        onClose={() => setShowAbout(false)}
+        isOpen={!!activeModalMember}
+        onClose={() => setActiveModalMember(null)}
         language={language}
+        memberId={activeModalMember === 'GENERAL' ? null : activeModalMember}
       />
       <ChatWidget language={language} />
 

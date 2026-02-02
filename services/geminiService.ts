@@ -161,7 +161,8 @@ const STATIC_DATA: Record<string, Record<Language, RegionContentResponse>> = {
         { year: "2012", event: "Ký Hiệp định Đối tác và Hợp tác toàn diện (PCA)." },
         { year: "2019", event: "Ký kết Hiệp định EVFTA và EVIPA tại Hà Nội." },
         { year: "2020", event: "Hiệp định EVFTA chính thức có hiệu lực." },
-        { year: "2022", event: "Thủ tướng dự Hội nghị Cấp cao ASEAN-EU tại Brussels." }
+        { year: "2022", event: "Thủ tướng dự Hội nghị Cấp cao ASEAN-EU tại Brussels." },
+        { year: "2026", event: "Dự kiến: Tầm nhìn Đối tác Chiến lược Xanh & Kinh tế số." }
       ]
     },
     en: {
@@ -173,7 +174,117 @@ const STATIC_DATA: Record<string, Record<Language, RegionContentResponse>> = {
         { year: "2012", event: "Signed Partnership and Cooperation Agreement (PCA)." },
         { year: "2019", event: "Signed EVFTA and EVIPA in Hanoi." },
         { year: "2020", event: "EVFTA officially entered into force." },
-        { year: "2022", event: "PM attended ASEAN-EU Commemorative Summit in Brussels." }
+        { year: "2026", event: "Projected: Vision for Green Strategic Partnership & Digital Economy." }
+      ]
+    }
+  },
+  [RegionID.CHINA]: {
+    vi: {
+      history: "Thiết lập quan hệ năm 1950. Trung Quốc là nước đầu tiên công nhận Việt Nam Dân chủ Cộng hòa. Quan hệ 'vừa là đồng chí, vừa là anh em' có lịch sử lâu đời, tuy có thăng trầm nhưng hợp tác hữu nghị vẫn là dòng chảy chính.",
+      contribution: "Đối tác thương mại lớn nhất của Việt Nam nhiều năm liền (kim ngạch >170 tỷ USD). Hợp tác chặt chẽ về quản lý biên giới trên đất liền và Vịnh Bắc Bộ.",
+      meaning: "Là láng giềng núi liền núi, sông liền sông, quan hệ ổn định với Trung Quốc là ưu tiên hàng đầu trong chính sách đối ngoại, góp phần bảo đảm an ninh, hòa bình và phát triển kinh tế.",
+      milestones: [
+        { year: "1950", event: "Thiết lập quan hệ ngoại giao (18/01)." },
+        { year: "2008", event: "Thiết lập quan hệ Đối tác Chiến lược Toàn diện." },
+        { year: "2023", event: "Tuyên bố chung về Cộng đồng chia sẻ tương lai Việt - Trung." }
+      ]
+    },
+    en: {
+      history: "Established relations in 1950. China was the first country to recognize DRV. The 'comrades and brothers' relationship has a long history; despite ups and downs, friendly cooperation remains the mainstream.",
+      contribution: "Vietnam's largest trading partner for many years (turnover >$170B). Close cooperation on land border management and the Gulf of Tonkin.",
+      meaning: "As a neighbor sharing mountains and rivers, stable relations with China are a top priority in foreign policy, ensuring security, peace, and economic development.",
+      milestones: [
+        { year: "1950", event: "Established diplomatic relations (Jan 18)." },
+        { year: "2008", event: "Established Comprehensive Strategic Partnership." },
+        { year: "2023", event: "Joint Statement on Vietnam-China Community with a Shared Future." }
+      ]
+    }
+  },
+  [RegionID.USA]: {
+    vi: {
+      history: "Từ cựu thù thành bạn, rồi đối tác chiến lược. Bình thường hóa quan hệ năm 1995 là bước ngoặt lịch sử. Chuyến thăm của các Tổng thống Mỹ (Clinton, Bush, Obama, Trump, Biden) khẳng định cam kết tôn trọng thể chế chính trị của nhau.",
+      contribution: "Thị trường xuất khẩu lớn nhất của Việt Nam. Hợp tác khắc phục hậu quả chiến tranh (tẩy độc dioxin, rà phá bom mìn). Hỗ trợ vắc-xin COVID-19 lớn nhất cho Việt Nam.",
+      meaning: "Quan hệ với Mỹ giúp Việt Nam cân bằng chiến lược, tiếp cận công nghệ cao (bán dẫn, AI) và đào tạo nguồn nhân lực chất lượng cao.",
+      milestones: [
+        { year: "1995", event: "Bình thường hóa quan hệ ngoại giao." },
+        { year: "2013", event: "Thiết lập quan hệ Đối tác Toàn diện." },
+        { year: "2023", event: "Nâng cấp lên Đối tác Chiến lược Toàn diện (10/09)." }
+      ]
+    },
+    en: {
+      history: "From former foes to friends, then strategic partners. Normalization in 1995 was a historic turning point. Visits by US Presidents (Clinton, Bush, Obama, Trump, Biden) affirmed commitment to respecting each other's political systems.",
+      contribution: "Vietnam's largest export market. Cooperation in war legacy remediation (dioxin cleanup, demining). Largest COVID-19 vaccine donor to Vietnam.",
+      meaning: "Relations with the US help Vietnam balance strategy, access high-tech (semiconductors, AI), and train high-quality human resources.",
+      milestones: [
+        { year: "1995", event: "Normalized diplomatic relations." },
+        { year: "2013", event: "Established Comprehensive Partnership." },
+        { year: "2023", event: "Upgraded to Comprehensive Strategic Partnership (Sep 10)." }
+      ]
+    }
+  },
+  [RegionID.JAPAN]: {
+    vi: {
+      history: "Thiết lập quan hệ năm 1973. Nhật Bản là nước G7 đầu tiên đón Tổng Bí thư Việt Nam đi thăm (1995). Quan hệ phát triển nhanh chóng dựa trên sự tin cậy chính trị cao.",
+      contribution: "Nhà tài trợ ODA lớn nhất cho Việt Nam (cầu Nhật Tân, sân bay Nội Bài). Đối tác đầu tư và du lịch hàng đầu. Hợp tác lao động sôi động.",
+      meaning: "Nhật Bản là đối tác quan trọng trong công nghiệp hóa, hiện đại hóa. Sự ủng hộ của Nhật giúp Việt Nam phát triển hạ tầng chiến lược.",
+      milestones: [
+        { year: "1973", event: "Thiết lập quan hệ ngoại giao." },
+        { year: "2014", event: "Đối tác Chiến lược sâu rộng." },
+        { year: "2023", event: "Nâng cấp lên Đối tác Chiến lược Toàn diện." }
+      ]
+    },
+    en: {
+      history: "Established relations in 1973. Japan was the first G7 country to host a Vietnamese General Secretary (1995). Relations developed rapidly based on high political trust.",
+      contribution: "Largest ODA donor to Vietnam (Nhat Tan Bridge, Noi Bai Airport). Top investment and tourism partner. Vibrant labor cooperation.",
+      meaning: "Japan is a key partner in industrialization and modernization. Japan's support helps Vietnam develop strategic infrastructure.",
+      milestones: [
+        { year: "1973", event: "Established diplomatic relations." },
+        { year: "2014", event: "Extensive Strategic Partnership." },
+        { year: "2023", event: "Upgraded to Comprehensive Strategic Partnership." }
+      ]
+    }
+  },
+  [RegionID.KOREA]: {
+    vi: {
+      history: "Thiết lập quan hệ năm 1992. Đặc điểm nổi bật là sự giao lưu nhân dân và văn hóa mạnh mẽ (Hàn lưu). Nhiều nét tương đồng về văn hóa.",
+      contribution: "Nhà đầu tư nước ngoài (FDI) lớn nhất tại Việt Nam (Samsung, LG, Hyundai). Đóng góp lớn vào chuyển dịch cơ cấu kinh tế sang công nghiệp điện tử.",
+      meaning: "Hàn Quốc là hình mẫu phát triển kinh tế để Việt Nam tham khảo. Đối tác quan trọng trong chuỗi cung ứng toàn cầu.",
+      milestones: [
+        { year: "1992", event: "Thiết lập quan hệ ngoại giao." },
+        { year: "2009", event: "Đối tác hợp tác chiến lược." },
+        { year: "2022", event: "Nâng cấp lên Đối tác Chiến lược Toàn diện." }
+      ]
+    },
+    en: {
+      history: "Established relations in 1992. Notable for strong people-to-people and cultural exchange (Hallyu). Many cultural similarities.",
+      contribution: "Largest foreign investor (FDI) in Vietnam (Samsung, LG, Hyundai). Major contribution to shifting economic structure to electronics.",
+      meaning: "Korea is a development model for Vietnam. Crucial partner in the global supply chain.",
+      milestones: [
+        { year: "1992", event: "Established diplomatic relations." },
+        { year: "2009", event: "Strategic Cooperative Partnership." },
+        { year: "2022", event: "Upgraded to Comprehensive Strategic Partnership." }
+      ]
+    }
+  },
+  [RegionID.RUSSIA]: {
+    vi: {
+      history: "Kế thừa quan hệ đặc biệt với Liên Xô (từ 1950). Chỗ dựa tin cậy về an ninh - quốc phòng trong những năm tháng khó khăn nhất.",
+      contribution: "Hợp tác năng lượng (Dầu khí - Vietsovpetro), kỹ thuật quân sự và giáo dục đào tạo. Nga tiếp tục cấp học bổng lớn cho sinh viên Việt Nam.",
+      meaning: "Đối tác chiến lược toàn diện đầu tiên của Việt Nam. Quan hệ với Nga có ý nghĩa then chốt trong đa dạng hóa quan hệ và đảm bảo an ninh năng lượng.",
+      milestones: [
+        { year: "1950", event: "Thiết lập quan hệ ngoại giao (với Liên Xô)." },
+        { year: "2001", event: "Đối tác Chiến lược." },
+        { year: "2012", event: "Nâng cấp lên Đối tác Chiến lược Toàn diện." }
+      ]
+    },
+    en: {
+      history: "Inherited special relations with USSR (from 1950). A reliable pillar for security and defense during the hardest times.",
+      contribution: "Cooperation in energy (Oil & Gas - Vietsovpetro), military technology, and education. Russia continues to provide major scholarships.",
+      meaning: "Vietnam's first Comprehensive Strategic Partner. Relations with Russia are key to diversifying ties and ensuring energy security.",
+      milestones: [
+        { year: "1950", event: "Established diplomatic relations (with USSR)." },
+        { year: "2001", event: "Strategic Partnership." },
+        { year: "2012", event: "Upgraded to Comprehensive Strategic Partnership." }
       ]
     }
   },

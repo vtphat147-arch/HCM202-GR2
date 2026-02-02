@@ -1,16 +1,16 @@
 
 import React, { useState } from 'react';
 import { Language } from '../types';
-import { 
-  Briefcase, 
-  GraduationCap, 
-  Palette, 
-  Flag, 
-  X, 
-  TrendingUp, 
-  Globe, 
-  Heart, 
-  ShieldCheck, 
+import {
+  Briefcase,
+  GraduationCap,
+  Palette,
+  Flag,
+  X,
+  TrendingUp,
+  Globe,
+  Heart,
+  ShieldCheck,
   ArrowRight,
   Landmark,
   Cpu,
@@ -23,6 +23,13 @@ interface CooperationFieldsPageProps {
   onBack: () => void;
 }
 
+interface StatDetail {
+  label: string;
+  value: string;
+  def?: string; // Definition (e.g., What is FDI?)
+  expl?: string; // Explanation (e.g., Source or Context)
+}
+
 interface FieldDetail {
   id: string;
   icon: React.ElementType;
@@ -32,7 +39,7 @@ interface FieldDetail {
   bgGradient: string;
   popupContent: {
     intro: string;
-    stats: { label: string; value: string }[];
+    stats: StatDetail[];
     points: string[];
     example: string;
   };
@@ -40,16 +47,20 @@ interface FieldDetail {
 
 const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language, onBack }) => {
   const [selectedField, setSelectedField] = useState<FieldDetail | null>(null);
+  const [selectedStat, setSelectedStat] = useState<StatDetail | null>(null); // Track clicked stat
   const isVi = language === 'vi';
 
   const texts = {
     heroTitle: isVi ? 'Các Lĩnh Vực Hợp Tác Nổi Bật' : 'Highlighted Cooperation Fields',
-    heroSubtitle: isVi 
-      ? 'Khám phá các trụ cột chính trong quan hệ quốc tế của Việt Nam' 
+    heroSubtitle: isVi
+      ? 'Khám phá các trụ cột chính trong quan hệ quốc tế của Việt Nam'
       : 'Discover the key pillars of Vietnam\'s international relations',
     back: isVi ? 'Quay lại' : 'Back',
     clickPrompt: isVi ? 'Nhấp vào thẻ để xem chi tiết' : 'Click on cards for details',
     exampleTitle: isVi ? 'Ví dụ điển hình:' : 'Typical Example:',
+    statDetailTitle: isVi ? 'Giải Thích Số Liệu' : 'Statistic Explanation',
+    source: isVi ? 'Nguồn/Bối cảnh:' : 'Source/Context:',
+    definition: isVi ? 'Định nghĩa:' : 'Definition:'
   };
 
   // REAL DATA INTEGRATION
@@ -62,13 +73,28 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
       color: 'text-blue-600',
       bgGradient: 'from-blue-50 to-blue-100',
       popupContent: {
-        intro: isVi 
-          ? 'Việt Nam nằm trong Top 20 nền kinh tế có quy mô thương mại quốc tế lớn nhất thế giới, chuyển dịch sang kinh tế số và tăng trưởng xanh.' 
+        intro: isVi
+          ? 'Việt Nam nằm trong Top 20 nền kinh tế có quy mô thương mại quốc tế lớn nhất thế giới, chuyển dịch sang kinh tế số và tăng trưởng xanh.'
           : 'Vietnam is among the Top 20 economies with the largest international trade scale, shifting to digital economy and green growth.',
         stats: [
-          { label: isVi ? 'Kim ngạch 2023' : '2023 Trade', value: '$683B' },
-          { label: isVi ? 'Tổng vốn FDI' : 'FDI Registered', value: '$36.6B' }, // 2023 Registered
-          { label: isVi ? 'Thị trường XK' : 'Export Mkts', value: '230+' }
+          {
+            label: isVi ? 'Kim ngạch 2023' : '2023 Trade',
+            value: '$683B',
+            def: isVi ? 'Tổng giá trị xuất khẩu và nhập khẩu hàng hóa.' : 'Total value of exports and imports of goods.',
+            expl: isVi ? 'Số liệu chốt năm 2023 của Tổng cục Thống kê. Mặc dù kinh tế toàn cầu suy thoái, VN vẫn duy trì xuất siêu $28 tỷ.' : '2023 finalized data from GSO. Despite global recession, VN maintained a $28B trade surplus.'
+          },
+          {
+            label: isVi ? 'Tổng vốn FDI' : 'FDI Registered',
+            value: '$36.6B',
+            def: isVi ? 'Vốn Đầu tư Trực tiếp Nước ngoài đăng ký mới.' : 'Newly registered Foreign Direct Investment capital.',
+            expl: isVi ? 'Tăng 32.1% so với 2022. Cho thấy niềm tin mạnh mẽ của các nhà đầu tư nước ngoài vào môi trường kinh doanh VN.' : 'Increased 32.1% vs 2022. Shows strong foreign investor confidence in VN business environment.'
+          },
+          {
+            label: isVi ? 'Thị trường XK' : 'Export Mkts',
+            value: '230+',
+            def: isVi ? 'Số lượng quốc gia/vùng lãnh thổ VN có quan hệ thương mại.' : 'Number of countries/territories VN trades with.',
+            expl: isVi ? 'Việt Nam đã đa dạng hóa thị trường, không phụ thuộc vào một đối tác duy nhất.' : 'Vietnam has diversified markets, reducing dependence on any single partner.'
+          }
         ],
         points: isVi ? [
           'Thành viên của các hiệp định thương mại tự do thế hệ mới: CPTPP, EVFTA, RCEP.',
@@ -81,8 +107,8 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
           'Attracting tech giants: Samsung, Intel, Foxconn, Amkor.',
           'JETP (Just Energy Transition Partnership) worth $15.5B with G7 & EU.'
         ],
-        example: isVi 
-          ? 'Hợp tác chiến lược về Bán dẫn & AI với Hoa Kỳ (2023) đưa Việt Nam vào chuỗi cung ứng toàn cầu.' 
+        example: isVi
+          ? 'Hợp tác chiến lược về Bán dẫn & AI với Hoa Kỳ (2023) đưa Việt Nam vào chuỗi cung ứng toàn cầu.'
           : 'Strategic cooperation on Semiconductors & AI with the US (2023) putting Vietnam in the global supply chain.'
       }
     },
@@ -94,13 +120,28 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
       color: 'text-green-600',
       bgGradient: 'from-green-50 to-green-100',
       popupContent: {
-        intro: isVi 
+        intro: isVi
           ? 'Hợp tác giáo dục giúp nâng cao chất lượng nguồn nhân lực chất lượng cao, với trọng tâm là STEM và ngôn ngữ.'
           : 'Education cooperation enhances high-quality human resources, focusing on STEM and languages.',
         stats: [
-          { label: isVi ? 'Du học sinh' : 'Students Abroad', value: '~200k' },
-          { label: isVi ? 'Tại Nhật Bản' : 'In Japan', value: '44,000+' },
-          { label: isVi ? 'Tại Hàn Quốc' : 'In Korea', value: '43,000+' }
+          {
+            label: isVi ? 'Du học sinh' : 'Students Abroad',
+            value: '~200k',
+            def: isVi ? 'Công dân Việt Nam đang học tập tại nước ngoài.' : 'Vietnamese citizens studying overseas.',
+            expl: isVi ? 'Việt Nam nằm trong top 5 nước gửi du học sinh nhiều nhất đến Mỹ, Nhật, Úc.' : 'VN is in top 5 countries sending students to US, Japan, Australia.'
+          },
+          {
+            label: isVi ? 'Tại Nhật Bản' : 'In Japan',
+            value: '44,000+',
+            def: isVi ? 'Số lượng DHS VN tại Nhật (JASSO 2023).' : 'Number of VN students in Japan (JASSO 2023).',
+            expl: isVi ? 'Đứng thứ 2 về số lượng du học sinh quốc tế tại Nhật, chỉ sau Trung Quốc.' : 'Ranked 2nd in intl students in Japan, only after China.'
+          },
+          {
+            label: isVi ? 'Tại Hàn Quốc' : 'In Korea',
+            value: '43,000+',
+            def: isVi ? 'Số lượng DHS VN tại Hàn (KEDI 2023).' : 'Number of VN students in Korea (KEDI 2023).',
+            expl: isVi ? 'Cộng đồng DHS lớn nhất tại Hàn Quốc, vượt qua Trung Quốc năm 2023.' : 'Largest intl student community in Korea, surpassing China in 2023.'
+          }
         ],
         points: isVi ? [
           'Các chương trình học bổng chính phủ: Đề án 89, Fulbright (Mỹ), Chevening (Anh), AAS (Úc), MEXT (Nhật).',
@@ -124,13 +165,28 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
       color: 'text-purple-600',
       bgGradient: 'from-purple-50 to-purple-100',
       popupContent: {
-        intro: isVi 
+        intro: isVi
           ? 'Việt Nam sử dụng "Sức mạnh mềm" văn hóa để kết nối với thế giới, được vinh danh là Điểm đến Di sản hàng đầu.'
           : 'Vietnam uses cultural "Soft Power" to connect with the world, honored as a Leading Heritage Destination.',
         stats: [
-          { label: isVi ? 'Di sản UNESCO' : 'World Heritage', value: '8 Sites' },
-          { label: isVi ? 'Khách du lịch' : 'Tourists (2023)', value: '12.6M' },
-          { label: isVi ? 'Khách 2024' : '2024 Target', value: '18M' }
+          {
+            label: isVi ? 'Di sản UNESCO' : 'World Heritage',
+            value: '8 Sites',
+            def: isVi ? 'Di sản Thiên nhiên/Văn hóa được UNESCO công nhận.' : 'UNESCO recognized Natural/Cultural Heritages.',
+            expl: isVi ? 'Bao gồm Vịnh Hạ Long, Phong Nha, Tràng An, Thành nhà Hồ, v.v. Tạo thương hiệu quốc gia.' : 'Includes Ha Long, Phong Nha, Trang An, etc. Creates national brand.'
+          },
+          {
+            label: isVi ? 'Khách du lịch' : 'Tourists (2023)',
+            value: '12.6M',
+            def: isVi ? 'Khách quốc tế đến Việt Nam năm 2023.' : 'International arrivals to Vietnam in 2023.',
+            expl: isVi ? 'Vượt mục tiêu 8 triệu ban đầu. Phục hồi mạnh mẽ sau Covid-19.' : 'Exceeded initial 8M target. Strong recovery post-Covid.'
+          },
+          {
+            label: isVi ? 'Khách 2024' : '2024 Target',
+            value: '18M',
+            def: isVi ? 'Mục tiêu đón khách quốc tế năm 2024.' : 'Intl arrivals target for 2024.',
+            expl: isVi ? 'Phấn đấu phục hồi hoàn toàn về mức trước đại dịch (2019).' : 'Aiming for full recovery to pre-pandemic levels (2019).'
+          }
         ],
         points: isVi ? [
           '8 Di sản Thiên nhiên/Văn hóa thế giới (Hạ Long, Phong Nha, Tràng An, Huế, Hội An, Mỹ Sơn, Thăng Long, Thành nhà Hồ).',
@@ -154,13 +210,28 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
       color: 'text-red-600',
       bgGradient: 'from-red-50 to-red-100',
       popupContent: {
-        intro: isVi 
+        intro: isVi
           ? 'Trường phái "Ngoại giao Cây tre": Gốc vững, thân chắc, cành uyển chuyển. Việt Nam là bạn, là đối tác tin cậy.'
           : '"Bamboo Diplomacy" school: Solid roots, stout trunk, flexible branches. Vietnam is a friend and reliable partner.',
         stats: [
-          { label: isVi ? 'Quan hệ NG' : 'Diplomatic Rel', value: '193' },
-          { label: isVi ? 'Đối tác CL' : 'Strat. Partners', value: '30+' }, // Broad category
-          { label: isVi ? 'Đối tác ĐC' : 'Comprehensive', value: '7 Major' } // China, Russia, India, Korea, US, Japan, Aus
+          {
+            label: isVi ? 'Quan hệ NG' : 'Diplomatic Rel',
+            value: '193',
+            def: isVi ? 'Số quốc gia thành viên LHQ có quan hệ ngoại giao với VN.' : 'UN member states with diplomatic ties to VN.',
+            expl: isVi ? 'Gần như toàn bộ các nước trên thế giới (193/193 thành viên LHQ).' : 'Almost all countries worldwide (193/193 UN members).'
+          },
+          {
+            label: isVi ? 'Đối tác CL' : 'Strat. Partners',
+            value: '30+',
+            def: isVi ? 'Số lượng Đối tác Chiến lược & Toàn diện.' : 'Number of Strategic & Comprehensive Partners.',
+            expl: isVi ? 'Mạng lưới đối tác sâu rộng giúp bảo vệ lợi ích quốc gia từ sớm, từ xa.' : 'Extensive partner network protects national interests early and from afar.'
+          },
+          {
+            label: isVi ? 'Đối tác ĐC' : 'Comprehensive',
+            value: '7 Major',
+            def: isVi ? 'Đối tác Chiến lược Toàn diện (Mức cao nhất).' : 'Comprehensive Strategic Partners (Highest level).',
+            expl: isVi ? 'Trung Quốc, Nga, Ấn Độ, Hàn Quốc, Mỹ, Nhật Bản, Úc.' : 'China, Russia, India, Korea, US, Japan, Australia.'
+          }
         ],
         points: isVi ? [
           '7 Đối tác Chiến lược Toàn diện: Trung Quốc, Nga, Ấn Độ, Hàn Quốc, Mỹ, Nhật Bản, Úc.',
@@ -184,13 +255,28 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
       color: 'text-cyan-600',
       bgGradient: 'from-cyan-50 to-cyan-100',
       popupContent: {
-        intro: isVi 
-          ? 'Việt Nam đang nổi lên như một trung tâm công nghệ mới, ưu tiên phát triển công nghiệp bán dẫn, AI và đổi mới sáng tạo.' 
+        intro: isVi
+          ? 'Việt Nam đang nổi lên như một trung tâm công nghệ mới, ưu tiên phát triển công nghiệp bán dẫn, AI và đổi mới sáng tạo.'
           : 'Vietnam is emerging as a new tech hub, prioritizing semiconductor industry, AI and innovation.',
         stats: [
-          { label: isVi ? 'Kinh tế số' : 'Digital Econ', value: '~16.5%' }, // of GDP
-          { label: isVi ? 'Kỹ sư CNTT' : 'IT Engineers', value: '530k+' },
-          { label: isVi ? 'Chỉ số GII' : 'GII Rank', value: '46/132' }
+          {
+            label: isVi ? 'Kinh tế số' : 'Digital Econ',
+            value: '~16.5%',
+            def: isVi ? 'Tỷ trọng kinh tế số trong GDP (2023).' : 'Share of digital economy in GDP (2023).',
+            expl: isVi ? 'Mục tiêu đạt 20% vào năm 2025. Tăng trưởng nhanh nhất ASEAN.' : 'Target 20% by 2025. Fastest growth in ASEAN.'
+          },
+          {
+            label: isVi ? 'Kỹ sư CNTT' : 'IT Engineers',
+            value: '530k+',
+            def: isVi ? 'Nhân lực công nghệ thông tin hiện có.' : 'Current IT workforce.',
+            expl: isVi ? 'Lợi thế dân số vàng, nhân lực trẻ, giá rẻ và kỹ năng tốt.' : 'Golden population, young workforce, competitive cost and good skills.'
+          },
+          {
+            label: isVi ? 'Chỉ số GII' : 'GII Rank',
+            value: '46/132',
+            def: isVi ? 'Chỉ số Đổi mới sáng tạo Toàn cầu (WIPO).' : 'Global Innovation Index (WIPO).',
+            expl: isVi ? 'Dẫn đầu nhóm quốc gia thu nhập trung bình thấp trong nhiều năm.' : 'Leading the lower-middle income group for consecutive years.'
+          }
         ],
         points: isVi ? [
           'Chiến lược quốc gia về bán dẫn: Đào tạo 50.000 kỹ sư đến năm 2030.',
@@ -203,8 +289,8 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
           'Operating the National Innovation Center (NIC) with international standards.',
           'Commercializing 5G network nationwide.'
         ],
-        example: isVi 
-          ? 'Tập đoàn NVIDIA cam kết biến Việt Nam thành "quê hương thứ hai" và trung tâm AI của khu vực.' 
+        example: isVi
+          ? 'Tập đoàn NVIDIA cam kết biến Việt Nam thành "quê hương thứ hai" và trung tâm AI của khu vực.'
           : 'NVIDIA commits to making Vietnam its "second home" and the region\'s AI hub.'
       }
     },
@@ -216,13 +302,28 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
       color: 'text-emerald-600',
       bgGradient: 'from-emerald-50 to-emerald-100',
       popupContent: {
-        intro: isVi 
-          ? 'Việt Nam là một trong những nước đi đầu trong nhóm đang phát triển về cam kết chống biến đổi khí hậu và chuyển đổi năng lượng.' 
+        intro: isVi
+          ? 'Việt Nam là một trong những nước đi đầu trong nhóm đang phát triển về cam kết chống biến đổi khí hậu và chuyển đổi năng lượng.'
           : 'Vietnam is a leader among developing nations in climate change commitments and energy transition.',
         stats: [
-          { label: isVi ? 'Mục tiêu' : 'Target', value: 'Net Zero' },
-          { label: isVi ? 'Năng lượng TT' : 'Renewables', value: '#1 ASEAN' },
-          { label: isVi ? 'Tài chính xanh' : 'Green Finance', value: '$15.5B' }
+          {
+            label: isVi ? 'Mục tiêu' : 'Target',
+            value: 'Net Zero',
+            def: isVi ? 'Phát thải ròng bằng 0 vào năm 2050.' : 'Net Zero emissions by 2050.',
+            expl: isVi ? 'Cam kết tại COP26, thể hiện trách nhiệm quốc tế cao của Việt Nam.' : 'COP26 commitment, showing Vietnam\'s high intl responsibility.'
+          },
+          {
+            label: isVi ? 'Năng lượng TT' : 'Renewables',
+            value: '#1 ASEAN',
+            def: isVi ? 'Công suất điện mặt trời và điện gió.' : 'Solar and wind power capacity.',
+            expl: isVi ? 'Việt Nam dẫn đầu Đông Nam Á về công suất năng lượng tái tạo lắp đặt.' : 'Leading SE Asia in installed renewable capacity.'
+          },
+          {
+            label: isVi ? 'Tài chính xanh' : 'Green Finance',
+            value: '$15.5B',
+            def: isVi ? 'Gói tài chính JETP huy động từ quốc tế.' : 'JETP financial package mobilized internationally.',
+            expl: isVi ? 'Hỗ trợ VN giảm phụ thuộc vào nhiệt điện than.' : 'Supports VN in reducing coal dependence.'
+          }
         ],
         points: isVi ? [
           'Cam kết mạnh mẽ tại COP26: Đạt phát thải ròng bằng "0" vào năm 2050.',
@@ -235,8 +336,8 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
           'Developing Carbon credit market and green bonds.',
           'Project to plant 1 billion trees in 2021-2025 period.'
         ],
-        example: isVi 
-          ? 'Nhà máy LEGO tại Bình Dương - Nhà máy trung hòa carbon đầu tiên trên thế giới của tập đoàn.' 
+        example: isVi
+          ? 'Nhà máy LEGO tại Bình Dương - Nhà máy trung hòa carbon đầu tiên trên thế giới của tập đoàn.'
           : 'LEGO Factory in Binh Duong - The group\'s first carbon-neutral factory globally.'
       }
     }
@@ -244,11 +345,11 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
 
   return (
     <div className="w-full bg-slate-50 min-h-full pb-12 animate-fade-in relative">
-      
+
       {/* Hero Section */}
       <div className="bg-diplomatic-900 text-white py-12 px-6 rounded-3xl mb-8 shadow-xl text-center relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-           <Globe className="w-96 h-96 absolute -top-20 -left-20 animate-pulse" />
+          <Globe className="w-96 h-96 absolute -top-20 -left-20 animate-pulse" />
         </div>
         <div className="relative z-10">
           <h2 className="text-3xl md:text-5xl font-serif font-bold mb-4">{texts.heroTitle}</h2>
@@ -258,29 +359,29 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
 
       <div className="max-w-6xl mx-auto px-4">
         <p className="text-center text-gray-500 mb-8 italic flex items-center justify-center gap-2">
-           <Heart className="w-4 h-4 text-red-400" /> {texts.clickPrompt}
+          <Heart className="w-4 h-4 text-red-400" /> {texts.clickPrompt}
         </p>
 
         {/* Grid Layout */}
         <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
           {fields.map((field) => (
-            <div 
+            <div
               key={field.id}
               onClick={() => setSelectedField(field)}
               className={`group bg-gradient-to-br ${field.bgGradient} p-8 rounded-3xl border border-white/50 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all cursor-pointer relative overflow-hidden`}
             >
               {/* Background Icon */}
               <field.icon className={`absolute -bottom-4 -right-4 w-32 h-32 opacity-10 ${field.color} group-hover:scale-110 transition-transform duration-500`} />
-              
+
               <div className="relative z-10 flex flex-col h-full">
                 <div className={`w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-6 ${field.color}`}>
                   <field.icon className="w-8 h-8" />
                 </div>
-                
+
                 <h3 className={`text-2xl font-bold mb-3 text-gray-800 group-hover:${field.color} transition-colors`}>
                   {field.title}
                 </h3>
-                
+
                 <p className="text-gray-600 mb-6 font-medium leading-relaxed">
                   {field.shortDesc}
                 </p>
@@ -297,19 +398,19 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
       {/* POPUP MODAL */}
       {selectedField && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in" onClick={() => setSelectedField(null)}>
-          <div 
-            className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative animate-fade-in-up max-h-[90vh] overflow-y-auto custom-scrollbar" 
+          <div
+            className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative animate-fade-in-up max-h-[90vh] overflow-y-auto custom-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header with Color */}
             <div className={`p-8 bg-gradient-to-r ${selectedField.bgGradient} relative sticky top-0 z-10`}>
-              <button 
+              <button
                 onClick={() => setSelectedField(null)}
                 className="absolute top-4 right-4 p-2 bg-white/50 hover:bg-white rounded-full transition-colors"
               >
                 <X className="w-6 h-6 text-gray-700" />
               </button>
-              
+
               <div className="flex items-center gap-4">
                 <div className={`p-3 bg-white rounded-xl shadow-sm ${selectedField.color}`}>
                   <selectedField.icon className="w-8 h-8" />
@@ -327,9 +428,14 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
               {/* Stats Row */}
               <div className="grid grid-cols-3 gap-4 mb-8">
                 {selectedField.popupContent.stats.map((stat, idx) => (
-                  <div key={idx} className="bg-gray-50 p-4 rounded-xl text-center border border-gray-100 hover:border-gray-300 transition-colors">
-                    <div className={`text-xl md:text-2xl font-bold mb-1 ${selectedField.color} break-words`}>{stat.value}</div>
-                    <div className="text-[10px] md:text-xs text-gray-500 uppercase font-bold tracking-wider">{stat.label}</div>
+                  <div
+                    key={idx}
+                    className="bg-gray-50 p-4 rounded-xl text-center border border-gray-100 hover:border-gold-400 hover:bg-gold-50 transition-colors cursor-pointer group"
+                    onClick={() => setSelectedStat(stat)}
+                  >
+                    <div className={`text-xl md:text-2xl font-bold mb-1 ${selectedField.color} break-words group-hover:scale-105 transition-transform`}>{stat.value}</div>
+                    <div className="text-[10px] md:text-xs text-gray-500 uppercase font-bold tracking-wider group-hover:text-diplomatic-900">{stat.label}</div>
+                    <div className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-gold-600 font-bold">{texts.clickPrompt}</div>
                   </div>
                 ))}
               </div>
@@ -347,7 +453,7 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
               {/* Example Box */}
               <div className={`p-5 rounded-xl bg-opacity-30 ${selectedField.bgGradient} border border-opacity-20 border-gray-200 flex items-start gap-4`}>
                 <div className={`p-2 bg-white rounded-full shadow-sm ${selectedField.color}`}>
-                  <Cpu className="w-5 h-5" /> 
+                  <Cpu className="w-5 h-5" />
                 </div>
                 <div>
                   <span className="font-bold text-gray-800 block text-sm mb-1 uppercase tracking-wide">{texts.exampleTitle}</span>
@@ -355,6 +461,56 @@ const CooperationFieldsPage: React.FC<CooperationFieldsPageProps> = ({ language,
                 </div>
               </div>
             </div>
+
+            {/* Stat Detail Popup (Nested) */}
+            {selectedStat && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center p-6 bg-white/95 backdrop-blur-md animate-fade-in">
+                <div className="max-w-md w-full">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setSelectedStat(null); }}
+                    className="absolute top-4 left-4 p-2 hover:bg-gray-100 rounded-full transition-colors flex items-center gap-1 text-gray-500 font-bold text-sm"
+                  >
+                    <ArrowRight className="w-4 h-4 rotate-180" /> {texts.back}
+                  </button>
+
+                  <h4 className="text-xl font-bold text-diplomatic-900 mb-6 text-center border-b pb-4">
+                    {texts.statDetailTitle}
+                  </h4>
+
+                  <div className="text-center mb-8">
+                    <div className="text-5xl font-bold text-gold-500 mb-2">{selectedStat.value}</div>
+                    <div className="text-sm font-bold text-gray-400 uppercase tracking-widest">{selectedStat.label}</div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                      <div className="text-xs font-bold text-blue-800 uppercase mb-1 flex items-center gap-2">
+                        <Zap className="w-3 h-3" /> {texts.definition}
+                      </div>
+                      <p className="text-blue-900 text-sm font-medium leading-relaxed">
+                        {selectedStat.def}
+                      </p>
+                    </div>
+
+                    <div className="bg-green-50 p-4 rounded-xl border border-green-100">
+                      <div className="text-xs font-bold text-green-800 uppercase mb-1 flex items-center gap-2">
+                        <Landmark className="w-3 h-3" /> {texts.source}
+                      </div>
+                      <p className="text-green-900 text-sm font-medium leading-relaxed">
+                        {selectedStat.expl}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setSelectedStat(null); }}
+                    className="mt-8 w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-xl transition-colors"
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            )}
 
           </div>
         </div>

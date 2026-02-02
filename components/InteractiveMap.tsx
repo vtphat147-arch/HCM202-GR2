@@ -16,7 +16,7 @@ interface InteractiveMapProps {
 const VIETNAM_COORDS = { x: 77.5, y: 56 }; // Approximate location of Vietnam
 
 const APEC_PARTNERS = [
-  { name: 'USA', x: 22, y: 35 },
+  { name: 'USA', x: 22, y: 89 },
   { name: 'China', x: 79, y: 38 },
   { name: 'Japan', x: 86, y: 34 },
   { name: 'Russia', x: 75, y: 18 },
@@ -30,6 +30,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regions, activeRegionId
   const [scale, setScale] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [isLegendOpen, setIsLegendOpen] = useState(false);
+  const [expandedClusterId, setExpandedClusterId] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const constraintsRef = useRef<HTMLDivElement>(null);
@@ -162,18 +163,66 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regions, activeRegionId
 
         {renderConnectionLines()}
 
-        {regions.map((region) => (
-          <MapPin
-            key={region.id}
-            top={region.coordinates.top}
-            left={region.coordinates.left}
-            label={region.name}
-            isActive={activeRegionId === region.id}
-            onClick={() => {
-              if (!isDragging) onRegionSelect(region.id);
-            }}
-          />
-        ))}
+        {regions.map((region) => {
+          const isCluster = !!region.subRegions && region.subRegions.length > 0;
+          const isExpanded = expandedClusterId === region.id;
+
+          return (
+            <React.Fragment key={region.id}>
+              {/* Main Pin (Cluster or Single) */}
+              <MapPin
+                top={region.coordinates.top}
+                left={region.coordinates.left}
+                label={region.name}
+                isActive={activeRegionId === region.id || isExpanded}
+                ariaLabel={isVi ? `Xem chi tiết về ${region.name}` : `View details for ${region.name}`}
+                onClick={() => {
+                  if (isDragging) return;
+
+                  if (isCluster) {
+                    setExpandedClusterId(isExpanded ? null : region.id);
+                  } else {
+                    onRegionSelect(region.id);
+                  }
+                }}
+              />
+
+              {/* Cluster List Menu */}
+              <AnimatePresence>
+                {isExpanded && (
+                  <motion.div
+                    className="absolute z-30 bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/50 p-2 min-w-[160px] flex flex-col gap-1 origin-top-left"
+                    style={{
+                      top: 'calc(' + region.coordinates.top + ' + 20px)',
+                      left: 'calc(' + region.coordinates.left + ' + 20px)',
+                    }}
+                    initial={{ opacity: 0, scale: 0.9, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                  >
+                    {region.subRegions?.map(sub => (
+                      <button
+                        key={sub.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRegionSelect(sub.id);
+                        }}
+                        className="flex items-center gap-3 p-2 hover:bg-diplomatic-50 rounded-lg transition-colors text-left group"
+                      >
+                        <div className="w-6 h-6 rounded-full bg-diplomatic-100 flex items-center justify-center shrink-0 border border-diplomatic-200 group-hover:border-gold-400 group-hover:bg-gold-100 transition-colors">
+                          <PinIcon className="w-3 h-3 text-diplomatic-600 group-hover:text-diplomatic-900" />
+                        </div>
+                        <span className="text-sm font-bold text-gray-700 group-hover:text-diplomatic-900">
+                          {sub.name}
+                        </span>
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </React.Fragment>
+          );
+        })}
       </motion.div>
 
       {/* Controls Overlay */}

@@ -127,7 +127,7 @@ const YouthPage: React.FC<YouthPageProps> = ({ language, onBack }) => {
       {/* Header */}
       <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-12 px-6 shadow-lg mb-8">
         <div className="max-w-5xl mx-auto">
-          <button 
+          <button
             onClick={onBack}
             className="mb-6 flex items-center gap-2 text-white/80 hover:text-white transition-colors text-sm font-medium"
           >
@@ -142,7 +142,7 @@ const YouthPage: React.FC<YouthPageProps> = ({ language, onBack }) => {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 space-y-12">
-        
+
         {/* Section 1: Skills */}
         <section>
           <div className="flex items-center gap-3 mb-6">
@@ -154,7 +154,7 @@ const YouthPage: React.FC<YouthPageProps> = ({ language, onBack }) => {
               <p className="text-gray-500">{texts.sections.skills.desc}</p>
             </div>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             {texts.sections.skills.items.map((item, idx) => (
               <div key={idx} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all group">
@@ -196,7 +196,7 @@ const YouthPage: React.FC<YouthPageProps> = ({ language, onBack }) => {
                   <p className="text-gray-600 text-sm">{prog.detail}</p>
                 </div>
                 <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
-                  <a 
+                  <a
                     href={`https://www.google.com/search?q=${encodeURIComponent(prog.name)}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -238,7 +238,7 @@ const YouthPage: React.FC<YouthPageProps> = ({ language, onBack }) => {
             </div>
             <div className="mt-8 pt-6 border-t border-gray-700 text-center">
               <p className="text-gray-400 text-sm italic">
-                "{isVi ? 'Đừng hỏi Tổ quốc đã làm gì cho ta, mà hãy hỏi ta đã làm gì cho Tổ quốc hôm nay.' : 'Ask not what your country can do for you — ask what you can do for your country.'}"
+                "{isVi ? 'Đâu cần thanh niên có, việc gì khó có thanh niên.' : 'Where there is need, youth are there; where there is difficulty, youth are there.'}"
               </p>
             </div>
           </div>
@@ -258,10 +258,10 @@ const YouthPage: React.FC<YouthPageProps> = ({ language, onBack }) => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {texts.sections.resources.items.map((res, idx) => (
-              <a 
-                key={idx} 
-                href={res.url} 
-                target="_blank" 
+              <a
+                key={idx}
+                href={res.url}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-green-200 transition-all flex flex-col items-center text-center group"
               >
@@ -282,7 +282,7 @@ const YouthPage: React.FC<YouthPageProps> = ({ language, onBack }) => {
 
 // Helper icon component
 const LanguagesIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m5 8 6 6" /><path d="m4 14 6-6 2-3" /><path d="M2 5h12" /><path d="M7 2h1" /><path d="m22 22-5-10-5 10" /><path d="M14 18h6" /></svg>
 );
 
 export default YouthPage;

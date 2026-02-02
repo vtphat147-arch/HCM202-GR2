@@ -6,6 +6,7 @@ export interface RegionData {
   name: string;
   shortDescription: string;
   coordinates: { top: string; left: string }; // Percentage for CSS positioning
+  subRegions?: RegionData[]; // For clustered regions
 }
 
 export interface Milestone {
@@ -33,5 +34,11 @@ export enum RegionID {
   ASEAN = 'ASEAN',
   APEC = 'APEC',
   EU = 'EU',
-  AFRICA = 'AFRICA'
+  AFRICA = 'AFRICA',
+  CHINA = 'CHINA',
+  USA = 'USA',
+  JAPAN = 'JAPAN',
+  KOREA = 'KOREA',
+  RUSSIA = 'RUSSIA',
+  NORTHEAST_ASIA = 'NORTHEAST_ASIA'
 }
